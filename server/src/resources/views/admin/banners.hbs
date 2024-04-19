@@ -1,0 +1,143 @@
+<div class="title">Banner</div>
+
+<div class="d-flex alig-item-start mb-4">
+    <a href="/admin/banners/create" class="btn btn-primary"
+    >Thêm banner</i
+></a>
+</div>
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th scope="col" class="text-center">Số TT</th>
+            <th scope="col">Tiêu đề</th>
+            <th scope="col">Hình ảnh</th>
+            {{!
+            <th scope="col">Mô tả</th>
+            }}
+
+            <th scope="col">Ngày chạy</th>
+            <th scope="col">Ngày gỡ</th>
+            <th scope="col"></th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {{#each banners}}
+        <tr>
+            <th class="align-middle text-center" scope="row">
+                {{sum @index 1 }}
+            </th>
+            <td
+                class="align-middle"
+                style="max-width: 150px; overflow-wrap: break-word"
+            >
+                {{this.title}}
+            </td>
+
+            <td class="align-middle">
+                <img
+                    src="{{this.image}}"
+                    style="width: 100px; height: 60spx"
+                    alt=""
+                />
+            </td>
+            {{!--
+            <td
+                class="align-middle line_limit"
+                style="max-width: 150px; overflow-wrap: break-word"
+            >
+                {{this.description}}
+            </td>
+            --}}
+
+            <td
+                class="align-middle"
+                style="max-width: 120px; overflow-wrap: break-word"
+            >
+                {{this.startDate}}
+            </td>
+            <td
+                class="align-middle"
+                style="max-width: 120px; overflow-wrap: break-word"
+            >
+                {{this.endDate}}
+            </td>
+            <td class="align-middle">
+                <a
+                    href="/admin/banners/{{this._id}}/edit-banner"
+                    class="btn btn-outline-info"
+                    ><i class="ti-pencil"></i
+                ></a>
+                <a
+                    href=""
+                    class="btn btn-outline-danger"
+                    data-bs-toggle="modal"
+                    data-bs-id="{{this._id}}"
+                    data-bs-target="#delete-banner-modal"
+                >
+                    <i class="ti-trash"></i>
+                </a>
+            </td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
+
+<div id="delete-banner-modal" class="modal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Xóa product</h5>
+                <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                ></button>
+            </div>
+            <div class="modal-body">
+                <p>Bạn có chắc muốn xóa sản phẩm này chứ ?</p>
+            </div>
+            <div class="modal-footer">
+                <button
+                    type="button"
+                    class="btn btn-secondary"
+                    data-bs-dismiss="modal"
+                >
+                    Hủy
+                </button>
+                <button
+                    id="btn-delete-banner"
+                    type="button"
+                    class="btn btn-danger"
+                >
+                    Xóa bỏ
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<form method="post" name="delete-banner-form"></form>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const deleteBannerModal = document.getElementById('delete-banner-modal');
+        const deleteForm = document.forms['delete-banner-form'];
+        const btnDeleteBanner = document.getElementById('btn-delete-banner');
+
+        let bannerID;
+        if (deleteBannerModal) {
+            deleteBannerModal.addEventListener('show.bs.modal', event => {
+                const button = event.relatedTarget;
+                bannerID = button.getAttribute('data-bs-id');
+            });
+        }
+
+        btnDeleteBanner.addEventListener('click', () => {
+            deleteForm.action =
+                '/admin/banners/' + bannerID + '?_method=DELETE';
+            deleteForm.submit();
+        });
+    });
+</script>

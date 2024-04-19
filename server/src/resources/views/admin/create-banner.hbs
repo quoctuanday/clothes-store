@@ -1,0 +1,71 @@
+<div>
+    <div class="title">Thêm banner</div>
+    <form method="post" action="/admin/banners/store">
+        <div class="form-group mt-4 container">
+            <div class="row mt-4">
+                <div class="col-5">
+                    <label for="name"> Tiêu đề banner</label>
+                    <input
+                        type="text"
+                        class="form-control"
+                        value=""
+                        id="name"
+                        name="name"
+                    />
+                </div>
+                <div class="col-3">
+                    <label for="img"> Hình ảnh banner: </label>
+                    <input
+                        type="text"
+                        class="form-control"
+                        value=""
+                        id="img"
+                        name="img"
+                    />
+                </div>
+            </div>
+
+            <div class="row mt-4">
+                <div class="col-8">
+                    <label for="description"> Mô tả banner:</label>
+                    <textarea
+                        class="form-control"
+                        id="description"
+                        name="description"
+                    ></textarea>
+                </div>
+            </div>
+
+            <div class="row mt-4">
+                <div class="col-3">
+                    <label for="startDate"> Ngày chạy banner: </label>
+                    <input
+                        type="datetime"
+                        class="form-control"
+                        value=""
+                        id="startDate"
+                        name="startDate"
+                    />
+                </div>
+
+                <div class="col-3">
+                    <label for="endDate"> Ngày gỡ banner </label>
+                    <input
+                        type="datetime"
+                        class="form-control"
+                        value=""
+                        id="endDate"
+                        name="endDate"
+                    />
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-2">
+                <button type="submit" class="btn btn-primary mt-3">
+                    Lưu lại
+                </button>
+            </div>
+        </div>
+    </form>
+</div>

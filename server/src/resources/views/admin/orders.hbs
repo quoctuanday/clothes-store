@@ -1,0 +1,49 @@
+<div class="title">Order</div>
+
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th scope="col" class="text-center">Số TT</th>
+            <th scope="col">Mã đơn hàng</th>
+            <th scope="col">Tên sản phẩm</th>
+            <th scope="col">Số lượng</th>
+            <th scope="col">Tình trạng đơn hàng</th>
+            <th scope="col">Thời gian</th>
+            <th scope="col" colspan="2">Thành tiền</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {{#each orders}} {{#each orderDetails}}
+        <tr>
+            <th class="align-middle text-center" scope="row">{{@index}}</th>
+            <td class="align-middle">{{../_id}}</td>
+            <!-- Mã đơn hàng -->
+            <td class="align-middle">
+                {{lookupProduct ../products this.productId}}
+            </td>
+            <!-- Tên sản phẩm -->
+            <td class="align-middle">{{this.quantity}}</td>
+            <!-- Số lượng -->
+            <td class="align-middle">
+                {{lookupOrderStatus ../orders this.orderId}}
+            </td>
+            <!-- Tình trạng đơn hàng -->
+            <td class="align-middle">{{../createdAt}}</td>
+            <!-- Thời gian -->
+            <td class="align-middle">{{../totalAmount}}</td>
+            <!-- Thành tiền -->
+            <td class="align-middle">
+                <a
+                    href=""
+                    class="btn btn-outline-danger"
+                    data-bs-toggle="modal"
+                    data-bs-id="{{../_id}}"
+                    data-bs-target="#delete-course-modal"
+                    >Hủy đơn</a
+                >
+            </td>
+        </tr>
+        {{/each}} {{/each}}
+    </tbody>
+</table>

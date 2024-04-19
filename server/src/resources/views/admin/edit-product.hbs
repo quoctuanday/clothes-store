@@ -1,0 +1,117 @@
+<div>
+    <div class="title">Chỉnh sửa thông tin sản phẩm</div>
+    <form method="post" action="/admin/products/{{product._id}}?_method=PUT">
+        <div class="form-group mt-4 container">
+            <div class="row mt-4">
+                <div class="col-3">
+                    <label for="name"> Tên sản phẩm</label>
+                    <input
+                        type="text"
+                        class="form-control"
+                        value="{{product.productName}}"
+                        id="name"
+                        name="name"
+                    />
+                </div>
+                <div class="col-2">
+                    <label for="branch"> Thương hiệu: </label>
+                    <input
+                        type="text"
+                        class="form-control"
+                        value="{{product.branch}}"
+                        id="branch"
+                        name="branch"
+                    />
+                </div>
+
+                <div class="col-2">
+                    <label for="gender"> Gender: </label>
+                    <input
+                        type="text"
+                        class="form-control"
+                        value="{{product.gender}}"
+                        id="gender"
+                        name="gender"
+                    />
+                </div>
+            </div>
+
+            <div class="row mt-4">
+                <div class="col-2">
+                    <label for="type"> Loại :</label>
+                    <input
+                        type="text"
+                        class="form-control"
+                        value="{{product.type}}"
+                        id="type"
+                        name="type"
+                    />
+                </div>
+
+                <div class="col-2">
+                    <label for="size"> Size:</label>
+                    <input
+                        type="text"
+                        class="form-control"
+                        value="{{product.size}}"
+                        id="size"
+                        name="size"
+                    />
+                </div>
+                <div class="col-2">
+                    <label for="color"> Màu: </label>
+                    <input
+                        type="text"
+                        class="form-control"
+                        value="{{product.color}}"
+                        id="color"
+                        name="color"
+                    />
+                </div>
+            </div>
+            <div class="row mt-4">
+                <div class="col-4">
+                    <label for="description"> Mô tả sản phẩm:</label>
+                    <textarea
+                        class="form-control"
+                        id="description"
+                        name="description"
+                    >
+{{product.description}}</textarea
+                    >
+                </div>
+            </div>
+
+            <div class="row mt-4">
+                <div class="col-3">
+                    <label for="img"> Hình ảnh sản phẩm: </label>
+                    <input
+                        type="text"
+                        class="form-control"
+                        value="{{product.image}}"
+                        id="img"
+                        name="img"
+                    />
+                </div>
+
+                <div class="col-2">
+                    <label for="price"> Giá bán(VND): </label>
+                    <input
+                        type="number"
+                        class="form-control"
+                        value="{{product.price}}"
+                        id="price"
+                        name="price"
+                    />
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-2">
+                <button type="submit" class="btn btn-primary mt-3">
+                    Lưu lại
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
