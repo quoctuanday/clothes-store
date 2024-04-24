@@ -1,4 +1,5 @@
 const path = require('path');
+const { PORT } = require('./config/env');
 const handlebars = require('express-handlebars');
 const express = require('express');
 const methodOverride = require('method-override');
@@ -7,9 +8,8 @@ const route = require('./routes');
 const db = require('./config/db');
 
 const app = express();
-const PORT = 8000;
+// const PORT = 8000;
 
-//Connect to db
 db.connect();
 
 app.use(

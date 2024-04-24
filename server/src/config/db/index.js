@@ -1,7 +1,9 @@
 const mongoose = require('mongoose');
+const { DB_URL } = require('../env');
+
 async function connect() {
     try {
-        await mongoose.connect('mongodb://localhost:27017/clothes_store', {});
+        await mongoose.connect(DB_URL, {});
         console.log('Connect successfully');
     } catch (error) {
         console.log('Connect failue');
