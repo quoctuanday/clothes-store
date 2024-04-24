@@ -6,44 +6,131 @@
             <th scope="col" class="text-center">Số TT</th>
             <th scope="col">Mã đơn hàng</th>
             <th scope="col">Tên sản phẩm</th>
-            <th scope="col">Số lượng</th>
-            <th scope="col">Tình trạng đơn hàng</th>
+            <th scope="col">Thành tiền</th>
             <th scope="col">Thời gian</th>
-            <th scope="col" colspan="2">Thành tiền</th>
+            <th scope="col">Tình trạng thanh toán</th>
+            <th scope="col" colspan="2">Trạng thái</th>
         </tr>
     </thead>
 
     <tbody>
-        {{#each orders}} {{#each orderDetails}}
-        <tr>
-            <th class="align-middle text-center" scope="row">{{@index}}</th>
-            <td class="align-middle">{{../_id}}</td>
-            <!-- Mã đơn hàng -->
-            <td class="align-middle">
-                {{lookupProduct ../products this.productId}}
-            </td>
-            <!-- Tên sản phẩm -->
-            <td class="align-middle">{{this.quantity}}</td>
-            <!-- Số lượng -->
-            <td class="align-middle">
-                {{lookupOrderStatus ../orders this.orderId}}
-            </td>
-            <!-- Tình trạng đơn hàng -->
-            <td class="align-middle">{{../createdAt}}</td>
-            <!-- Thời gian -->
-            <td class="align-middle">{{../totalAmount}}</td>
-            <!-- Thành tiền -->
-            <td class="align-middle">
-                <a
-                    href=""
-                    class="btn btn-outline-danger"
-                    data-bs-toggle="modal"
-                    data-bs-id="{{../_id}}"
-                    data-bs-target="#delete-course-modal"
-                    >Hủy đơn</a
+        <form
+            name="container-form"
+            class="mt-4"
+            method="POST"
+            action="/admin/orders/handle-form-actions?_method=PUT"
+        >
+            {{#each orders}}
+            <tr>
+                <th class="align-middle text-center" scope="row">
+                    {{sum @index 1}}
+                </th>
+                <td
+                    class="align-middle"
+                    style="max-width: 120px; overflow-wrap: break-word"
                 >
-            </td>
-        </tr>
-        {{/each}} {{/each}}
+                    {{this._id}}
+                </td>
+                <td class="align-middle">{{productId.productName}}</td>
+                <td class="align-middle">{{this.totalAmount}}</td>
+                <td
+                    class="align-middle"
+                    style="max-width: 120px; overflow-wrap: break-word"
+                >
+                    {{this.createdAt}}
+                </td>
+                <td class="align-middle">{{this.paymentStatus}}</td>
+
+                <td class="align-middle dropdown">
+                    <select
+                        class="form-select form-select-sm form-select-checkall"
+                        required
+                        name="action"
+                        data-saved-status="{{this.status}}"
+                    >
+                        {{#eq this.status "Chờ xử lí"}}
+                            <option value="Chờ xử lí" name="stastus" selected>
+                                Chờ xử lí
+                            </option>
+                        {{else}}
+                            <option value="Chờ xử lí" name="stastus">
+                                Chờ xử lí
+                            </option>
+                        {{/eq}}
+                        {{#eq this.status "Chờ lấy hàng"}}
+                            <option value="Chờ lấy hàng" name="stastus" selected>
+                                Chờ lấy hàng
+                            </option>
+                        {{else}}
+                            <option value="Chờ lấy hàng" name="stastus">
+                                Chờ lấy hàng
+                            </option>
+                        {{/eq}}
+                        {{#eq this.status "Chờ giao hàng"}}
+                            <option value="Chờ giao hàng" name="stastus" selected>
+                                Chờ giao hàng
+                            </option>
+                        {{else}}
+                            <option value="Chờ giao hàng" name="stastus">
+                                Chờ giao hàng
+                            </option>
+                        {{/eq}}
+                        {{#eq this.status "Đã giao"}}
+                            <option value="Đã giao" name="stastus" selected>
+                                Đã giao
+                            </option>
+                        {{else}}
+                            <option value="Đã giao" name="stastus">
+                                Đã giao
+                            </option>
+                        {{/eq}}
+                        {{#eq this.status "Đã hủy"}}
+                            <option value="Đã hủy" name="stastus" selected>
+                                Đã hủy
+                            </option>
+                        {{else}}
+                            <option value="Đã hủy" name="stastus">
+                                Đã hủy
+                            </option>
+                        {{/eq}}
+                    </select>
+                    </select>
+                </td>
+                <input type="hidden" name="orderId" value="{{this._id}}" />
+                <td class="align-middle">
+                    <button class="btn btn-outline-info">Cập nhật</button>
+                </td>
+            </tr>
+            {{/each}}
+        </form>
     </tbody>
 </table>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const selectElement = document.querySelector('.form-select-checkall');
+        const savedStatus = selectElement.dataset.savedStatus; // Lấy trạng thái đã lưu từ thuộc tính dữ liệu
+
+        // Tìm chỉ số của trạng thái đã lưu trong dropdown
+        const savedStatusIndex = Array.from(selectElement.options).findIndex(
+            option => option.value === savedStatus
+        );
+
+        // Vô hiệu hóa các tùy chọn trước trạng thái đã lưu
+        Array.from(selectElement.options).forEach((option, index) => {
+            if (index < savedStatusIndex) {
+                option.disabled = true;
+            }
+        });
+
+        // Bắt sự kiện thay đổi trên dropdown
+        selectElement.addEventListener('change', function () {
+            const selectedIndex = this.selectedIndex;
+            if (selectedIndex < savedStatusIndex) {
+                // Nếu người dùng chọn một tùy chọn trước trạng thái đã lưu,
+                // thì chuyển về trạng thái đã lưu
+                this.selectedIndex = savedStatusIndex;
+            }
+        });
+    });
+</script>

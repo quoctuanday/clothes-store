@@ -10,6 +10,7 @@ const Order = new Schema(
         productId: { type: mongoose.Schema.Types.ObjectId, ref: Product },
         status: { type: String, maxLength: 255 },
         totalAmount: { type: Number, maxLength: 255 },
+        paymentStatus: { type: String, maxLength: 255 },
     },
     { timestamps: true }
 );

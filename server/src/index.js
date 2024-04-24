@@ -1,20 +1,16 @@
 const path = require('path');
-const express = require('express');
-
-const methodOverride = require('method-override');
 const handlebars = require('express-handlebars');
+const express = require('express');
+const methodOverride = require('method-override');
 
-const db = require('./config/db');
 const route = require('./routes');
+const db = require('./config/db');
 
 const app = express();
 const PORT = 8000;
 
 //Connect to db
 db.connect();
-
-//router init
-route(app);
 
 app.use(
     express.urlencoded({
@@ -37,12 +33,18 @@ app.engine(
         extname: '.hbs',
         helpers: {
             sum: (a, b) => a + b,
+            eq: function (arg1, arg2, options) {
+                return arg1 === arg2 ? options.fn(this) : options.inverse(this);
+            },
         },
     })
 );
 
 app.set('view engine', 'hbs');
 app.set('views', path.join(__dirname, 'resources', 'views'));
+
+//router init
+route(app);
 
 app.listen(PORT, () => {
     console.log(`Server started on  http://localhost:${PORT}`);
