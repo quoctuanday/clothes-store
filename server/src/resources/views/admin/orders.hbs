@@ -9,7 +9,8 @@
             <th scope="col">Thành tiền</th>
             <th scope="col">Thời gian</th>
             <th scope="col">Tình trạng thanh toán</th>
-            <th scope="col" colspan="2">Trạng thái</th>
+            <th scope="col" >Trạng thái</th>
+            <th scope="col" colspan="2">Thao tác</th>
         </tr>
     </thead>
 
@@ -99,7 +100,14 @@
                 <input type="hidden" name="orderId" value="{{this._id}}" />
                 <td class="align-middle">
                     <button class="btn btn-outline-info">Cập nhật</button>
+                    {{!-- {{#eq this.status "Chờ xử lí"}} <!-- Kiểm tra trạng thái để quyết định hiển thị nút -->
+                        <button class="btn btn-danger">Hủy đơn hàng</button>
+                    {{else}}
+                        <button class="btn btn-secondary " disabled>Hủy đơn hàng</button>
+                    {{/eq}} --}}
+
                 </td>
+                
             </tr>
             {{/each}}
         </form>
@@ -131,6 +139,7 @@
                 // thì chuyển về trạng thái đã lưu
                 this.selectedIndex = savedStatusIndex;
             }
+            
         });
     });
 </script>

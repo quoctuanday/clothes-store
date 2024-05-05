@@ -3,6 +3,7 @@ const { PORT } = require('./config/env');
 const handlebars = require('express-handlebars');
 const express = require('express');
 const methodOverride = require('method-override');
+const cors = require('cors');
 
 const route = require('./routes');
 const db = require('./config/db');
@@ -15,6 +16,12 @@ db.connect();
 app.use(
     express.urlencoded({
         extended: true,
+    })
+);
+
+app.use(
+    cors({
+        origin: 'http://localhost:3000',
     })
 );
 
