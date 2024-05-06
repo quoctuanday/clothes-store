@@ -2,6 +2,8 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import Image from 'next/image';
 import Link from 'next/link';
+import SearchInput from '@/components/search_input';
+
 import {
     FaFacebook,
     FaInstagram,
@@ -122,14 +124,8 @@ export default function RootLayout({
                     </li>
                 </ul>
 
-                <div className="w-[524px] relative">
-                    <Input
-                        type="text"
-                        placeholder="Tìm kiếm sản phẩm..."
-                        className="max-w-[524px] rounded"
-                    />
-
-                    <FaSearch className="absolute top-[10px] right-[8px] hover:text-[#7000FF]" />
+                <div className="w-[524px]">
+                    <SearchInput />
                 </div>
 
                 <div className="flex items-center">

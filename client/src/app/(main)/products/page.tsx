@@ -1,30 +1,13 @@
 /* eslint-disable @next/next/no-img-element */
 'use client';
-import { useEffect, useState } from 'react';
-import { Products } from '@/schema/product';
+
 import Image from 'next/image';
 import { FaHeart, FaRegHeart } from 'react-icons/fa';
 import Link from 'next/link';
+import ProductData from '@/api/Product';
 
 const ProductList = () => {
-    const [products, setProducts] = useState<Products[]>([]);
-
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await fetch('http://localhost:8000/products');
-                if (!response.ok) {
-                    throw new Error('Failed to fetch products');
-                }
-                const data = await response.json();
-                setProducts(data.products);
-            } catch (error) {
-                console.error(error);
-            }
-        };
-
-        fetchData();
-    }, []);
+    const products = ProductData();
 
     return (
         <div>

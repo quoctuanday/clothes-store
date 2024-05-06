@@ -1,52 +1,68 @@
-import { useRouter } from 'next/navigation';
-import { useState, ChangeEvent } from 'react';
+'use client';
+import { useEffect, useState } from 'react';
+import Fuse from 'fuse.js';
+import ProductData from '@/api/Product';
+import { Input } from '@/components/ui/input';
+import { FaSearch } from 'react-icons/fa';
+import Link from 'next/link';
+import Image from 'next/image';
 
-interface iDefault {
-    defaultValue: string | null;
-}
+export default function SearchInput() {
+    const products = ProductData();
 
-export const SearchInput = ({ defaultValue }: iDefault) => {
-    // initiate the router from next/navigation
+    const [query, setQuery] = useState('');
 
-    const router = useRouter();
+    const fuse = new Fuse(products, {
+        keys: ['productName'],
+        includeScore: true,
+    });
 
-    // We need to grab the current search parameters and use it as default value for the search input
+    const results = fuse.search(query);
+    console.log('result', results);
+    const productResults = results.map((result) => result.item);
 
-    const [inputValue, setValue] = useState(defaultValue);
-
-    const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-        const inputValue = event.target.value;
-
-        setValue(inputValue);
-    };
-
-    // If the user clicks enter on the keyboard, the input value should be submitted for search
-
-    // We are now routing the search results to another page but still on the same page
-
-    const handleSearch = () => {
-        if (inputValue) return router.push(`/?q=${inputValue}`);
-
-        if (!inputValue) return router.push('/');
-    };
-
-    const handleKeyPress = (event: { key: any }) => {
-        if (event.key === 'Enter') return handleSearch();
-    };
+    function handleOnSearch({
+        currentTarget,
+    }: React.ChangeEvent<HTMLInputElement>) {
+        const { value } = currentTarget;
+        setQuery(value);
+    }
 
     return (
-        <div className="search__input border-[2px] border-solid border-slate-500 flex flex-row items-center gap-5 p-1 rounded-[15px]">
-            <label htmlFor="inputId">searchIcon</label>
-
-            <input
+        <div className="relative">
+            <Input
                 type="text"
-                id="inputId"
-                placeholder="Enter your keywords"
-                value={inputValue ?? ''}
-                onChange={handleChange}
-                onKeyDown={handleKeyPress}
-                className="bg-[transparent] outline-none max-w-[524px] rounded  py-3 pl-2 pr-3"
+                placeholder="Tìm kiếm sản phẩm..."
+                className="max-w-[524px] rounded "
+                value={query}
+                onChange={handleOnSearch}
             />
+            <div className="absolute top-9 rounded right-0 left-0 max-w-[524px]  shadow-sm bg-white">
+                <ul className="">
+                    {productResults.map((product) => (
+                        <li key={product._id}>
+                            <Link
+                                href={`products/${product._id}`}
+                                className=" flex items-center justify-start ml-2 my-1 "
+                            >
+                                <div className="">
+                                    <Image
+                                        src={product.image}
+                                        alt="ảnh sản phẩm"
+                                        width={30}
+                                        height={30}
+                                    ></Image>
+                                </div>
+                                <h2 className="ml-2 my-2">
+                                    {product.productName}
+                                </h2>
+                            </Link>
+                        </li>
+                    ))}
+                </ul>
+            </div>
+
+            {/* <FaSearch className="absolute top-[10px] right-[8px] hover:text-[#7000FF]" /> */}
         </div>
     );
-};
+}
