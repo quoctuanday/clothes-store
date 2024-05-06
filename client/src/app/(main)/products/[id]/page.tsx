@@ -32,7 +32,7 @@ export default function ProductDetail({ params }: { params: { id: string } }) {
 
     return (
         <div>
-            <div className="px-[40px] grid grid-cols-2 mt-[30px] gap-[40px]  ">
+            <div className="px-[40px] grid grid-cols-2 mt-[50px] gap-[40px]  ">
                 <div className="col-span-1 flex justify-center items-center ">
                     <Image
                         src={product.image}
@@ -45,7 +45,7 @@ export default function ProductDetail({ params }: { params: { id: string } }) {
                     <h1 className="font-extrabold text-4xl">
                         {product.productName}
                     </h1>
-                    <span className="text-2xl font-semibold block mb-4 leading-normal">
+                    <span className="text-2xl font-semibold block mb-4 leading-normal mt-2">
                         Giá sản phẩm: {product.price} VND
                     </span>
                     <span className="text-2xl font-semibold block mb-4 leading-normal">

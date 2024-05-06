@@ -13,13 +13,12 @@ export default function SearchInput() {
     const [query, setQuery] = useState('');
 
     const fuse = new Fuse(products, {
-        keys: ['productName'],
+        keys: ['productName', 'gender', 'type'],
         includeScore: true,
     });
 
     const results = fuse.search(query);
     console.log('result', results);
-    const productResults = results.map((result) => result.item);
 
     function handleOnSearch({
         currentTarget,
@@ -27,6 +26,25 @@ export default function SearchInput() {
         const { value } = currentTarget;
         setQuery(value);
     }
+
+    function matchAllWords(item: any, words: string[]) {
+        return words.every((word) => {
+            return ['productName', 'gender', 'type'].some((key) => {
+                const fieldValue = String(item[key]).toLowerCase();
+                return fieldValue.includes(word);
+            });
+        });
+    }
+
+    const productResults =
+        query.trim() === ''
+            ? []
+            : fuse
+                  .search(query)
+                  .map((result) => result.item)
+                  .filter((item) =>
+                      matchAllWords(item, query.toLowerCase().split(' '))
+                  );
 
     return (
         <div className="relative">
@@ -42,8 +60,10 @@ export default function SearchInput() {
                     {productResults.map((product) => (
                         <li key={product._id}>
                             <Link
-                                href={`products/${product._id}`}
+                                href="/products/[id]"
+                                as={`/products/${product._id}`}
                                 className=" flex items-center justify-start ml-2 my-1 "
+                                onClick={() => setQuery('')}
                             >
                                 <div className="">
                                     <Image
