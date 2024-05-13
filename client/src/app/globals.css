@@ -2,6 +2,26 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+    .line-clamp-1 {
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 1;
+        overflow: hidden;
+    }
+}
+
+@layer components {
+    .product-item:hover {
+        transform: translateY(-10px);
+        transition: transform 0.3s ease;
+    }
+    .category-item:hover {
+        transform: translateX(5px);
+        transition: transform 0.3s ease;
+    }
+}
+
 @layer utilities {
     .roboto-thin {
         font-family: 'Roboto', sans-serif;

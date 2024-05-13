@@ -52,7 +52,7 @@ export default function RootLayout({
                     <li>
                         <a
                             href="#"
-                            className="text-gray-800 hover:text-black flex items-center"
+                            className="text-gray-800 hover:text-[#7000FF] flex items-center"
                         >
                             <MdEmail className="pr-[4px] pt-[3px] hover:text-[#7000FF]" />
                             0987 654 321
@@ -61,7 +61,7 @@ export default function RootLayout({
                     <li>
                         <a
                             href="#"
-                            className="text-gray-800 hover:text-black flex items-center"
+                            className="text-gray-800 flex items-center hover:text-[#7000FF]"
                         >
                             <FaPhoneAlt className="pr-[4px] pt-[3px] hover:text-[#7000FF]" />
                             example@email.com

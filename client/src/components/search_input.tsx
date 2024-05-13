@@ -3,9 +3,9 @@ import { useEffect, useState } from 'react';
 import Fuse from 'fuse.js';
 import ProductData from '@/api/Product';
 import { Input } from '@/components/ui/input';
-import { FaSearch } from 'react-icons/fa';
 import Link from 'next/link';
 import Image from 'next/image';
+import { FaSearch } from 'react-icons/fa';
 
 export default function SearchInput() {
     const products = ProductData();
@@ -55,7 +55,7 @@ export default function SearchInput() {
                 value={query}
                 onChange={handleOnSearch}
             />
-            <div className="absolute top-9 rounded right-0 left-0 max-w-[524px]  shadow-sm bg-white">
+            <div className="absolute top-9 rounded right-0 left-0 max-w-[524px] max-h-[360px] overflow-y-scroll  shadow-sm bg-white">
                 <ul className="">
                     {productResults.map((product) => (
                         <li key={product._id}>
