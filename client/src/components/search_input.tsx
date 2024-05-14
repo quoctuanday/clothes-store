@@ -18,7 +18,6 @@ export default function SearchInput() {
     });
 
     const results = fuse.search(query);
-    console.log('result', results);
 
     function handleOnSearch({
         currentTarget,
