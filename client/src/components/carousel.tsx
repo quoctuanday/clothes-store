@@ -25,7 +25,7 @@ function CarouselBanner() {
                         height={500}
                     />
                     <div className="absolute top-[70%] left-20">
-                        <h3 className="max-w-[500px] roboto-bold uppercase text-xl  text-black hover:text-[#45a7ce] cursor-pointer">
+                        <h3 className="max-w-[500px] roboto-bold uppercase text-left text-xl  text-black hover:text-[#45a7ce] cursor-pointer">
                             {item.title}
                         </h3>
                         <button className="rounded flex items-center justify-center h-8 p-2 mt-5 bg-[#6366f1] text-white roboto-regular">

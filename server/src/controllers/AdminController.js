@@ -61,7 +61,7 @@ class AdminController {
     }
 
     showProducts(req, res, next) {
-        Product.find({ status: 'Chưa bán' })
+        Product.find({ quantityInStock: { $gt: 0 } })
             .then(products => {
                 res.render('admin/products', {
                     products: multipleMongooseToObject(products),
@@ -121,19 +121,33 @@ class AdminController {
             .then(updatedOrder => {
                 // Kiểm tra nếu trạng thái mới của đơn hàng là "đã giao"
                 if (newStatus === 'Đã giao') {
-                    // Tìm sản phẩm liên quan đến đơn hàng
-                    return Product.findOne({ _id: updatedOrder.productId });
+                    // Tìm chi tiết đơn hàng liên quan đến orderId
+                    return OrderDetail.findOne({ orderId: orderId });
                 } else {
                     return Promise.resolve(null); // Không cần cập nhật sản phẩm
                 }
             })
-            .then(product => {
-                // Kiểm tra nếu tìm thấy sản phẩm và trạng thái mới của đơn hàng là "đã giao"
-                if (product && newStatus === 'Đã giao') {
-                    // Cập nhật trạng thái của sản phẩm thành "đã bán"
-                    product.status = 'Đã bán';
-                    // Lưu lại thay đổi trạng thái của sản phẩm
-                    return product.save();
+            .then(orderDetail => {
+                // Kiểm tra nếu tìm thấy chi tiết đơn hàng và trạng thái mới của đơn hàng là "đã giao"
+                if (orderDetail && newStatus === 'Đã giao') {
+                    // Lấy quantity từ orderDetail
+                    const quantity = orderDetail.quantity;
+
+                    // Tìm sản phẩm liên quan đến đơn hàng
+                    return Product.findOne({ _id: orderDetail.productId }).then(
+                        product => {
+                            // Kiểm tra nếu tìm thấy sản phẩm
+                            if (product) {
+                                // Cập nhật trạng thái của sản phẩm thành "đã bán"
+                                product.quantitySold += quantity;
+                                product.quantityInStock -= quantity;
+                                // Lưu lại thay đổi trạng thái của sản phẩm
+                                return product.save();
+                            } else {
+                                return Promise.resolve(null); // Không cần cập nhật sản phẩm
+                            }
+                        }
+                    );
                 } else {
                     return Promise.resolve(null); // Không cần cập nhật sản phẩm
                 }
@@ -142,7 +156,7 @@ class AdminController {
                 res.redirect('back');
             })
             .catch(err => {
-                console.error('Lỗi khi update order: ', err);
+                console.error('Lỗi khi cập nhật đơn hàng: ', err);
                 next(err);
             });
     }
@@ -158,6 +172,7 @@ class AdminController {
     storeProduct(req, res, next) {
         const formData = req.body;
         formData.status = 'Chưa bán';
+        formData.quantitySold = 0;
         const product = new Product(formData);
         product
             .save()

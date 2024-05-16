@@ -7,10 +7,8 @@ const Banner = new Schema(
     {
         image: { type: String, maxLength: 255 },
         title: { type: String, maxLength: 255 },
-        description: { type: String, maxLength: 255 },
+
         targetUrl: { type: String, maxLength: 255 },
-        startDate: { type: Date },
-        endDate: { type: Date },
     },
     { timestamps: true }
 );

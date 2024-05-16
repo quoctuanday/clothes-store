@@ -4,7 +4,7 @@ const Product = require('../models/Product');
 
 class ProductController {
     showProducts(req, res, next) {
-        Product.find({ status: 'Chưa bán' })
+        Product.find({ quantityInStock: { $gt: 0 } })
             .then(products => {
                 res.json({ products: multipleMongooseToObject(products) }); //
             })

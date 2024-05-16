@@ -16,6 +16,8 @@ const Product = new Schema(
         size: { type: String, maxLength: 255 },
         type: { type: String, maxLength: 600 },
         status: { type: String, maxLength: 255 },
+        quantityInStock: { type: Number, default: 0 },
+        quantitySold: { type: Number, default: 0 },
     },
     { timestamps: true }
 );
