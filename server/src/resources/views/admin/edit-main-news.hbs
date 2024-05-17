@@ -1,0 +1,64 @@
+<div>
+    <div class="title">Chỉnh sửa thông tin tin chính</div>
+    <form method="POST" action="/admin/news/{{mainNews._id}}/edit-main-news?_method=PUT">
+        <div class="form-group mt-4 container">
+            <div class="row mt-4">
+                <div class="col-3">
+                    <label for="newsName"> Tiêu đề:</label>
+                    <input
+                        type="text"
+                        class="form-control"
+                        value="{{mainNews.newsName}}"
+                        id="newsName"
+                        name="newsName"
+                    />
+                </div>
+            </div>
+
+            <div class="row mt-4">
+                <div class="col-6">
+                    <label for="image"> Hình ảnh:</label>
+                    <input
+                        type="text"
+                        class="form-control"
+                        value="{{mainNews.image}}"
+                        id="image"
+                        name="image"
+                    />
+                </div>
+            </div>
+
+            <div class="row mt-4">
+                <div class="col-12">
+                    <label for="title">Giới thiệu:</label>
+                    <input
+                        type="text"
+                        class="form-control"
+                        value="{{mainNews.title}}"
+                        id="title"
+                        name="title"
+                    />
+                </div>
+            </div>
+
+            <div class="row mt-4">
+                <div class="col-12">
+                    <label for="content">Nội dung:</label>
+                    <textarea
+                        class="form-control"
+                        id="content"
+                        name="content"
+                    >{{mainNews.content}}</textarea>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-2">
+                <button type="submit" class="btn btn-primary mt-3">
+                    Lưu lại
+                </button>
+            </div>
+        </div>
+    </form>
+</div>

@@ -5,6 +5,8 @@ const User = require('../models/User');
 const Product = require('../models/Product');
 const Order = require('../models/Order');
 const OrderDetail = require('../models/OrderDetail');
+const MainNews = require('../models/MainNews');
+const SecondaryNews = require('../models/SecondaryNews');
 
 class AdminController {
     showHome(req, res, next) {
@@ -86,6 +88,23 @@ class AdminController {
             });
     }
 
+    showNews(req, res, next) {
+        Promise.all([
+            MainNews.find({}), // Fetch all main news
+            SecondaryNews.find({}) // Fetch all secondary news
+        ])
+        .then(([mainNews, secondaryNews]) => {
+            res.render('admin/news', {
+                mainNews: multipleMongooseToObject(mainNews),
+                secondaryNews: multipleMongooseToObject(secondaryNews),
+            });
+        })
+        .catch(error => {
+            console.error('Lỗi khi đưa ra danh sách tin tức:', error);
+            next(error);
+        });
+    }
+
     deleteCustomers(req, res, next) {
         User.deleteOne({ _id: req.params.id })
             .then(() => res.redirect('back'))
@@ -112,6 +131,29 @@ class AdminController {
                 next(err);
             });
     }
+
+    deleteNews(req, res, next) {
+        const newsId = req.params.id;
+        const newsType = req.params.type;
+    
+        if (newsType === 'main') {
+            MainNews.deleteOne({ _id: newsId })
+                .then(() => res.redirect('/admin/news'))
+                .catch(err => {
+                    console.error('Lỗi khi xóa tin tức chính: ', err);
+                    next(err);
+                });
+        } else if (newsType === 'secondary') {
+            SecondaryNews.deleteOne({ _id: newsId })
+                .then(() => res.redirect('/admin/news'))
+                .catch(err => {
+                    console.error('Lỗi khi xóa tin tức phụ: ', err);
+                    next(err);
+                });
+        } else {
+            res.status(400).send('Invalid news type');
+        }
+    }    
 
     handleFormActions(req, res, next) {
         const orderId = req.body.orderId;
@@ -167,6 +209,14 @@ class AdminController {
 
     createBanner(req, res, next) {
         res.render('admin/create-banner');
+    }
+
+    createMainNews(req, res, next) {
+        res.render('admin/create-main-news');
+    }
+    
+    createSecondaryNews(req, res, next) {
+        res.render('admin/create-secondary-news');
     }
 
     storeProduct(req, res, next) {
@@ -246,6 +296,20 @@ class AdminController {
             });
     }
 
+    storeMainNews(req, res, next) {
+        const news = new MainNews(req.body);
+        news.save()
+            .then(() => res.redirect('/admin/news'))
+            .catch(next)
+    }
+
+    storeSecondaryNews(req, res, next) {
+        const news = new SecondaryNews(req.body);
+        news.save()
+            .then(() => res.redirect('/admin/news'))
+            .catch(next)
+    }    
+
     editProduct(req, res, next) {
         Product.findById(req.params.id).then(product =>
             res.render('admin/edit-product', {
@@ -281,12 +345,44 @@ class AdminController {
             });
     }
 
+    updateMainNews(req, res, next) {
+        MainNews.updateOne({ _id: req.params.id }, req.body)
+            .then(() => res.redirect('/admin/news'))
+            .catch(next);
+    }
+    
+    updateSecondaryNews(req, res, next) {
+        SecondaryNews.updateOne({ _id: req.params.id }, req.body)
+            .then(() => res.redirect('/admin/news'))
+            .catch(next);
+    } 
+
     editBanner(req, res, next) {
         Banner.findById(req.params.id).then(banner =>
             res.render('admin/edit-banner', {
                 banner: mongooseToObject(banner),
             })
         );
+    }
+
+    editMainNews(req, res, next) {
+        MainNews.findById(req.params.id)
+        .then(mainNews => {
+            res.render('admin/edit-main-news', {
+                mainNews: mongooseToObject(mainNews)
+            });
+        })
+        .catch(next);
+    }
+    
+    editSecondaryNews(req, res, next) {
+        SecondaryNews.findById(req.params.id)
+        .then(secondaryNews => {
+            res.render('admin/edit-secondary-news', {
+                secondaryNews: mongooseToObject(secondaryNews)
+            });
+        })
+        .catch(next);
     }
 }
 
