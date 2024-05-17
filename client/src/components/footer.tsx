@@ -32,20 +32,20 @@ function Footer() {
                             <ul className=" ">
                                 <li>
                                     <a
-                                        href="#"
+                                        href="mailto:example@email.com"
                                         className="text-gray-800 hover:text-[#7000FF] flex items-center"
                                     >
                                         <MdEmail className="pr-[4px] hover:text-[#7000FF]" />
-                                        0987 654 321
+                                        example@email.com
                                     </a>
                                 </li>
                                 <li>
                                     <a
-                                        href="#"
+                                        href="tel:0987654321"
                                         className="text-gray-800 flex items-center hover:text-[#7000FF]"
                                     >
                                         <FaPhoneAlt className="pr-[4px] pt-[3px] hover:text-[#7000FF]" />
-                                        example@email.com
+                                        0987 654 321
                                     </a>
                                 </li>
                             </ul>
@@ -147,7 +147,7 @@ function Footer() {
                     ></Image>
                 </div>
                 <span className="block text-center">
-                    Copyright © 2019 All rights reserved.
+                    Copyright © 2024 All rights reserved.
                 </span>
             </div>
         </div>
