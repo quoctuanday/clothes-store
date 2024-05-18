@@ -4,6 +4,7 @@ const handlebars = require('express-handlebars');
 const express = require('express');
 const methodOverride = require('method-override');
 const cors = require('cors');
+const cookieParser = require('cookie-parser');
 
 const route = require('./routes');
 const db = require('./config/db');
@@ -13,6 +14,7 @@ const app = express();
 
 db.connect();
 
+app.use(cookieParser());
 app.use(
     express.urlencoded({
         extended: true,
@@ -22,6 +24,7 @@ app.use(
 app.use(
     cors({
         origin: 'http://localhost:3000',
+        credentials: true,
     })
 );
 
