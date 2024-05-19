@@ -165,9 +165,9 @@ const ProductPage = () => {
                         renderOnZeroPageCount={null}
                         containerClassName="pagination"
                         activeClassName=" text-white bg-[#7000FF]"
-                        pageClassName=" rounded mx-2 w-[32px] h-[32px] border flex items-center justify-center hover:text-white hover:bg-[#7000FF]"
+                        pageClassName=" rounded mx-2 w-[32px] h-[32px] border flex items-center justify-center  hover:bg-[#7000FF]"
                         pageLinkClassName="page-link"
-                        previousClassName={`rounded mx-2 px-2 h-[32px] border flex items-center justify-center hover:text-white hover:bg-[#7000FF] ${
+                        previousClassName={`rounded mx-2 px-2 h-[32px] border flex items-center justify-center  hover:bg-[#7000FF] ${
                             currentPage === 1
                                 ? 'cursor-not-allowed text-gray-400 hover:bg-white hover:text-gray-400'
                                 : ''

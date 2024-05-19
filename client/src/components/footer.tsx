@@ -1,5 +1,5 @@
 'use client';
-import React from 'react';
+import React, { useState } from 'react';
 import {
     FaFacebook,
     FaInstagram,
@@ -10,6 +10,7 @@ import {
 import ProductData from '@/api/Product';
 import { MdEmail } from 'react-icons/md';
 import Image from 'next/image';
+import emailjs from 'emailjs-com';
 
 function Footer() {
     const products = ProductData();
@@ -17,9 +18,49 @@ function Footer() {
         new Set(products.map((product) => product.type))
     );
 
+    const [formData, setFormData] = useState({
+        name: '',
+        email: '',
+        phone: '',
+        message: '',
+    });
+    const [status, setStatus] = useState('');
+
+    const handleChange = (
+        e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    ) => {
+        const { name, value } = e.target;
+        setFormData({
+            ...formData,
+            [name]: value,
+        });
+    };
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setStatus('Đang gửi...');
+
+        emailjs
+            .send(
+                'service_b8sv9l8', // Service ID
+                'template_2ggjwmf', // Template ID
+                formData,
+                'oWSWSNhtk3A_4rX4x' // User ID
+            )
+            .then((response) => {
+                console.log('SUCCESS!', response.status, response.text);
+                setStatus('Gửi tin nhắn thành công!');
+                setFormData({ name: '', email: '', phone: '', message: '' });
+            })
+            .catch((error) => {
+                console.error('FAILED...', error);
+                setStatus('Gửi tin nhắn thất bại. Vui lòng thử lại.');
+            });
+    };
+
     return (
         <div>
-            <div className="h-[435px] bg-gray-300 mt-20">
+            <div className=" bg-gray-300 mt-20">
                 <div className="pt-20 px-10 grid grid-cols-6 gap-5">
                     <div className="col-span-2">
                         <h1 className="roboto-bold text-2xl">
@@ -32,20 +73,20 @@ function Footer() {
                             <ul className=" ">
                                 <li>
                                     <a
-                                        href="#"
+                                        href="mailto:example@email.com"
                                         className="text-gray-800 hover:text-[#7000FF] flex items-center"
                                     >
                                         <MdEmail className="pr-[4px] hover:text-[#7000FF]" />
-                                        0987 654 321
+                                        example@email.com
                                     </a>
                                 </li>
                                 <li>
                                     <a
-                                        href="#"
+                                        href="tel:0987654321"
                                         className="text-gray-800 flex items-center hover:text-[#7000FF]"
                                     >
                                         <FaPhoneAlt className="pr-[4px] pt-[3px] hover:text-[#7000FF]" />
-                                        example@email.com
+                                        0987 654 321
                                     </a>
                                 </li>
                             </ul>
@@ -122,19 +163,58 @@ function Footer() {
                         </ul>
                     </div>
                     <div className="col-span-2">
-                        <h1 className="roboto-bold text-2xl pb-[30px]">
-                            Phản hồi
-                        </h1>
-                        <form action="">
+                        <h1 className="roboto-bold text-2xl pb-4">Phản hồi</h1>
+                        <form
+                            onSubmit={handleSubmit}
+                            className="space-y-4 flex flex-col items-center"
+                        >
+                            <input
+                                type="text"
+                                name="name"
+                                placeholder="Họ tên"
+                                value={formData.name}
+                                onChange={handleChange}
+                                required
+                                className="bg-transparent p-2 w-full focus:outline-none focus:border-[#7000FF] border-b-2 border-[#636161] "
+                            />
                             <input
                                 type="email"
-                                placeholder="example@.gmail.com"
-                                className="bg-transparent p-2 w-[300px] focus:outline-none focus:border-[#7000FF] border-b-2 border-[#636161] "
+                                name="email"
+                                placeholder="Email"
+                                value={formData.email}
+                                onChange={handleChange}
+                                required
+                                className="bg-transparent p-2 w-full focus:outline-none focus:border-[#7000FF] border-b-2 border-[#636161] "
                             />
-                            <button className="bg-[#333] p-3 px-5 mt-[30px]  uppercase rounded text-white block roboto-regular hover:bg-[#7000FF] hover:text-white">
-                                Subcribe
+                            <input
+                                type="tel"
+                                name="phone"
+                                placeholder="Số điện thoại"
+                                value={formData.phone}
+                                onChange={handleChange}
+                                required
+                                className="bg-transparent p-2 w-full focus:outline-none focus:border-[#7000FF] border-b-2 border-[#636161] "
+                            />
+                            <textarea
+                                name="message"
+                                placeholder="Tin nhắn"
+                                value={formData.message}
+                                onChange={handleChange}
+                                required
+                                className="bg-transparent p-2 w-full focus:outline-none focus:border-[#7000FF] border-b-2 border-[#636161] "
+                            ></textarea>
+                            <button
+                                type="submit"
+                                className="bg-[#333] p-2 px-4 mt-4 max-w-[150px] uppercase rounded text-white block roboto-regular hover:bg-[#7000FF] hover:text-white"
+                            >
+                                Subscribe
                             </button>
                         </form>
+                        {status && (
+                            <p className="mt-4 text-center text-gray-600">
+                                {status}
+                            </p>
+                        )}
                     </div>
                 </div>
                 <div className="flex items-center justify-center max-h-[100px] overflow-hidden">
@@ -147,7 +227,7 @@ function Footer() {
                     ></Image>
                 </div>
                 <span className="block text-center">
-                    Copyright © 2019 All rights reserved.
+                    Copyright © 2024 All rights reserved.
                 </span>
             </div>
         </div>

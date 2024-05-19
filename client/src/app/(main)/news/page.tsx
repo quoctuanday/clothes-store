@@ -33,8 +33,11 @@ const NewsPage = () => {
     const displayNews = (news: News[]) => {
         return news
             .slice((currentPage - 1) * pageSize, currentPage * pageSize)
-            .map(item => (
-                <li key={item._id} className="shadow-lg news-item rounded-lg overflow-hidden mb-6 transition-transform transform hover:scale-105 hover:shadow-2xl">
+            .map((item) => (
+                <li
+                    key={item._id}
+                    className="shadow-lg news-item rounded overflow-hidden mb-6 transition-transform transform hover:scale-105 hover:shadow-2xl"
+                >
                     <Link href={`/news/${item._id}`}>
                         <div className="relative group">
                             <img
@@ -43,11 +46,15 @@ const NewsPage = () => {
                                 alt="news image"
                             />
                             <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition duration-300">
-                                <h2 className="text-white text-xl font-bold text-center px-2">{item.title}</h2>
+                                <h2 className="text-white text-xl font-bold text-center px-2">
+                                    {item.title}
+                                </h2>
                             </div>
                         </div>
                         <div className="p-4 bg-white">
-                            <h3 className="font-semibold text-lg mb-2 line-clamp-2">{item.newsName}</h3>
+                            <h3 className="font-semibold text-lg mb-2 line-clamp-2">
+                                {item.newsName}
+                            </h3>
                         </div>
                     </Link>
                 </li>
@@ -55,7 +62,10 @@ const NewsPage = () => {
     };
 
     return (
-        <div className="container mx-auto px-4 py-8">
+        <div className="container mx-auto px-10 py-8">
+            <div className="flex items-center justify-center  text-4xl font-semibold pb-8">
+                Tin tức
+            </div>
             {/* Tin tức chính */}
             {mainNews.length > 0 && (
                 <div className="mb-12">
@@ -67,7 +77,9 @@ const NewsPage = () => {
                                 alt={mainNews[0].newsName}
                             />
                             <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition duration-300 rounded-lg">
-                                <h1 className="text-white text-4xl font-bold p-4 text-center">{mainNews[0].title}</h1>
+                                <h1 className="text-white text-4xl font-bold p-4 text-center">
+                                    {mainNews[0].title}
+                                </h1>
                             </div>
                         </div>
                     </Link>
@@ -81,30 +93,47 @@ const NewsPage = () => {
 
             {/* Phân trang */}
             <ReactPaginate
-                className="flex my-6 items-center justify-center space-x-2"
+                className="flex my-6 items-center justify-center"
                 breakLabel="..."
                 nextLabel="next >"
                 onPageChange={onPageChange}
                 pageRangeDisplayed={2}
-                pageCount={Math.ceil((mainNews.length + secondaryNews.length) / pageSize)}
+                pageCount={Math.ceil(
+                    (mainNews.length + secondaryNews.length) / pageSize
+                )}
                 previousLabel="< previous"
                 renderOnZeroPageCount={null}
                 containerClassName="pagination"
-                activeClassName="bg-blue-500 text-white"
-                pageClassName="rounded-full w-10 h-10 border flex items-center justify-center hover:bg-blue-500 hover:text-white transition"
-                previousClassName={`rounded-full w-10 h-10 border flex items-center justify-center hover:bg-blue-500 hover:text-white transition ${
-                    currentPage === 1 ? 'cursor-not-allowed text-gray-400' : ''
+                activeClassName=" text-white bg-[#7000FF]"
+                pageClassName=" rounded mx-2 w-[32px] h-[32px] border flex items-center justify-center hover:text-white hover:bg-[#7000FF]"
+                pageLinkClassName="page-link"
+                previousClassName={`rounded mx-2 px-2 h-[32px] border flex items-center justify-center hover:bg-[#7000FF] ${
+                    currentPage === 1
+                        ? 'cursor-not-allowed text-gray-400 hover:bg-white hover:text-gray-400'
+                        : ''
                 }`}
                 previousLinkClassName={`page-link ${
-                    currentPage === 1 ? 'pointer-events-none' : ''
+                    currentPage === 1
+                        ? 'cursor-not-allowed pointer-events-none hover:bg-white hover:text-gray-400'
+                        : ''
                 }`}
-                nextClassName={`rounded-full w-10 h-10 border flex items-center justify-center hover:bg-blue-500 hover:text-white transition ${
-                    currentPage === Math.ceil((mainNews.length + secondaryNews.length) / pageSize) ? 'cursor-not-allowed text-gray-400' : ''
+                nextClassName={`rounded mx-2 px-2 h-[32px] border flex items-center justify-center  hover:bg-[#7000FF] ${
+                    currentPage ===
+                    Math.ceil(
+                        (mainNews.length + secondaryNews.length) / pageSize
+                    )
+                        ? 'cursor-not-allowed text-gray-400 hover:bg-white hover:text-gray-400'
+                        : ''
                 }`}
                 nextLinkClassName={`page-link ${
-                    currentPage === Math.ceil((mainNews.length + secondaryNews.length) / pageSize) ? 'pointer-events-none' : ''
+                    currentPage ===
+                    Math.ceil(
+                        (mainNews.length + secondaryNews.length) / pageSize
+                    )
+                        ? 'cursor-not-allowed pointer-events-none'
+                        : ''
                 }`}
-                breakClassName="rounded-full w-10 h-10 border flex items-center justify-center hover:bg-blue-500 hover:text-white transition"
+                breakClassName="page-item"
                 breakLinkClassName="page-link"
             />
         </div>

@@ -43,11 +43,11 @@ function Header() {
                 <ul className="flex space-x-4">
                     <li>
                         <a
-                            href="#"
+                            href="mailto:example@gmail.com"
                             className="text-gray-800 hover:text-[#7000FF] flex items-center"
                         >
                             <MdEmail className="pr-[4px] pt-[3px] hover:text-[#7000FF]" />
-                            0987 654 321
+                            example@email.com
                         </a>
                     </li>
                     <li>
@@ -56,7 +56,7 @@ function Header() {
                             className="text-gray-800 flex items-center hover:text-[#7000FF]"
                         >
                             <FaPhoneAlt className="pr-[4px] pt-[3px] hover:text-[#7000FF]" />
-                            example@email.com
+                            0987 654 321
                         </a>
                     </li>
                 </ul>
@@ -121,12 +121,17 @@ function Header() {
                 </div>
 
                 <div className="flex items-center">
-                    <div className="mr-[16px] hover:text-[#7000FF]">
-                        <FaUser />
-                    </div>
-                    <div className="hover:text-[#7000FF]">
-                        <FaShoppingCart />
-                    </div>
+                    {' '}
+                    <Link href="/profile">
+                        <div className="mr-[16px] hover:text-[#7000FF]">
+                            <FaUser />
+                        </div>
+                    </Link>
+                    <Link href="/cart">
+                        <div className="hover:text-[#7000FF]">
+                            <FaShoppingCart />
+                        </div>
+                    </Link>
                 </div>
             </nav>
         </div>

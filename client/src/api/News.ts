@@ -7,7 +7,7 @@ export const fetchNewsData = async () => {
         const data = await response.json();
         return {
             mainNews: data.mainNews || [],
-            secondaryNews: data.secondaryNews || []
+            secondaryNews: data.secondaryNews || [],
         };
     } catch (error) {
         console.error('Error fetching news:', error);

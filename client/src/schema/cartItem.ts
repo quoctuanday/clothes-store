@@ -1,8 +1,8 @@
 export type Banners = {
     _id: string;
-    title: string;
-    image: string;
-    targetURL: string;
+    cartId: string;
+    productId: string;
+    quantity: number;
     createdAt: string;
     updatedAt: string;
 };
