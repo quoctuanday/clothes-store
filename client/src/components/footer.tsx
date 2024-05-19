@@ -163,7 +163,7 @@ function Footer() {
                         <h1 className="roboto-bold text-2xl pb-4">
                             Phản hồi
                         </h1>
-                        <form onSubmit={handleSubmit} className="space-y-4">
+                        <form onSubmit={handleSubmit} className="space-y-4 flex flex-col items-center">
                             <input
                                 type="text"
                                 name="name"
@@ -171,7 +171,7 @@ function Footer() {
                                 value={formData.name}
                                 onChange={handleChange}
                                 required
-                                className="bg-transparent p-2 w-[300px] focus:outline-none focus:border-[#7000FF] border-b-2 border-[#636161] "
+                                className="bg-transparent p-2 w-full focus:outline-none focus:border-[#7000FF] border-b-2 border-[#636161] "
                             />
                             <input
                                 type="email"
@@ -180,7 +180,7 @@ function Footer() {
                                 value={formData.email}
                                 onChange={handleChange}
                                 required
-                                className="bg-transparent p-2 w-[300px] focus:outline-none focus:border-[#7000FF] border-b-2 border-[#636161] "
+                                className="bg-transparent p-2 w-full focus:outline-none focus:border-[#7000FF] border-b-2 border-[#636161] "
                             />
                             <input
                                 type="tel"
@@ -189,7 +189,7 @@ function Footer() {
                                 value={formData.phone}
                                 onChange={handleChange}
                                 required
-                                className="bg-transparent p-2 w-[300px] focus:outline-none focus:border-[#7000FF] border-b-2 border-[#636161] "
+                                className="bg-transparent p-2 w-full focus:outline-none focus:border-[#7000FF] border-b-2 border-[#636161] "
                             />
                             <textarea
                                 name="message"
@@ -197,13 +197,13 @@ function Footer() {
                                 value={formData.message}
                                 onChange={handleChange}
                                 required
-                                className="bg-transparent p-2 w-[300px] focus:outline-none focus:border-[#7000FF] border-b-2 border-[#636161] "
+                                className="bg-transparent p-2 w-full focus:outline-none focus:border-[#7000FF] border-b-2 border-[#636161] "
                             ></textarea>
-                             <button 
-                            type="submit"
-                            className="bg-[#333] p-3 px-5 mt-[30px]  uppercase rounded text-white block roboto-regular hover:bg-[#7000FF] hover:text-white"
+                            <button 
+                                type="submit"
+                                className="bg-[#333] p-2 px-4 mt-4 max-w-[150px] uppercase rounded text-white block roboto-regular hover:bg-[#7000FF] hover:text-white"
                             >
-                                Subcribe
+                                Subscribe
                             </button>
                         </form>
                         {status && <p className="mt-4 text-center text-gray-600">{status}</p>}
