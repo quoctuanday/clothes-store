@@ -1,53 +1,59 @@
-const { multipleMongooseToObject } = require('../utils/mongoose');
-const { mongooseToObject } = require('../utils/mongoose');
+const bcrypt = require('bcrypt');
 const User = require('../models/User');
-const { response } = require('express');
-const sessions = {};
+
 class AuthController {
-    async login(req, res, next) {
+    login(req, res, next) {
         const { email, password } = req.body;
-        try {
-            const user = await User.findOne({ email, password }).exec();
 
-            if (!user) {
-                return res.status(401).json({
-                    message: 'Unauth',
+        console.log('Login attempt with email:', email);
+
+        User.findOne({ email })
+            .exec()
+            .then(user => {
+                if (!user) {
+                    console.log('User not found');
+                    return res.status(401).json({ message: 'Unauthorized' });
+                }
+
+                console.log('User found:', user.email);
+
+                return bcrypt.compare(password, user.password).then(match => {
+                    if (!match) {
+                        console.log('Password does not match');
+                        return res
+                            .status(401)
+                            .json({ message: 'Unauthorized' });
+                    }
+
+                    req.session.userId = user._id;
+                    console.log(req.session.userId);
+                    res.json(user);
                 });
-            }
-
-            const sessionId = Date.now().toString();
-            sessions[sessionId] = { sub: user._id };
-            res.setHeader(
-                'Set-Cookie',
-                `sessionId=${sessionId}; httpOnly; max-age=3600;path=/; domain=localhost`
-            ).json(user);
-        } catch (error) {
-            next(error);
-        }
+            })
+            .catch(error => {
+                console.error('Error during login:', error);
+                next(error);
+            });
     }
 
-    async getUser(req, res, next) {
-        try {
-            const session = sessions[req.cookies.sessionId];
-
-            if (!session) {
-                return res.status(401).json({
-                    message: 'Session not found',
-                });
-            }
-
-            const user = await User.findOne({ _id: session.sub }).exec();
-
-            if (!user) {
-                return res.status(401).json({
-                    message: 'Unauth',
-                });
-            }
-
-            res.json(user);
-        } catch (error) {
-            next(error);
+    getUser(req, res, next) {
+        if (!req.session.userId) {
+            return res.status(401).json({ message: 'Session not found' });
         }
+
+        User.findById(req.session.userId)
+            .exec()
+            .then(user => {
+                if (!user) {
+                    return res.status(401).json({ message: 'Unauthorized' });
+                }
+
+                res.json(user);
+            })
+            .catch(error => {
+                console.error('Error during getUser:', error);
+                next(error);
+            });
     }
 }
 

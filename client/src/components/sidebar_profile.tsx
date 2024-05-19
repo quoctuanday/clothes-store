@@ -59,7 +59,7 @@ function SidebarProfile() {
                                 <RiBillLine />
                             </div>
                             <Link
-                                href={'/orders'}
+                                href={'/order'}
                                 className="p-3 block roboto-regular text-xl"
                             >
                                 Đơn mua

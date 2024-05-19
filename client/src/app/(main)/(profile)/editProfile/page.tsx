@@ -33,6 +33,13 @@ function EditProfilePage() {
         });
     };
 
+    const handleGenderChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setFormData({
+            ...formData,
+            gender: e.target.value,
+        });
+    };
+
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         if (!user?._id) {
@@ -142,14 +149,30 @@ function EditProfilePage() {
                                     <label className="col-span-1 roboto-regular flex items-center justify-end">
                                         Giới tính:
                                     </label>
-                                    <input
-                                        className="col-span-2 ml-3 border border-gray-300 rounded p-1"
-                                        type="text"
-                                        value={formData.gender}
-                                        id="gender"
-                                        name="gender"
-                                        onChange={handleChange}
-                                    />
+                                    <div className="col-span-2 ml-3 flex items-center">
+                                        <input
+                                            className="mr-2"
+                                            type="radio"
+                                            value="Nam"
+                                            id="male"
+                                            name="gender"
+                                            checked={formData.gender === 'Nam'}
+                                            onChange={handleGenderChange}
+                                        />
+                                        <label htmlFor="male" className="mr-4">
+                                            Nam
+                                        </label>
+                                        <input
+                                            className="mr-2"
+                                            type="radio"
+                                            value="Nữ"
+                                            id="female"
+                                            name="gender"
+                                            checked={formData.gender === 'Nữ'}
+                                            onChange={handleGenderChange}
+                                        />
+                                        <label htmlFor="female">Nữ</label>
+                                    </div>
                                 </div>
                             </div>
                             <div className="col-span-3">

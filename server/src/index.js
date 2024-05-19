@@ -5,6 +5,8 @@ const express = require('express');
 const methodOverride = require('method-override');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
+const bcrypt = require('bcrypt');
+const session = require('express-session');
 
 const route = require('./routes');
 const db = require('./config/db');
@@ -13,8 +15,21 @@ const app = express();
 // const PORT = 8000;
 
 db.connect();
-
 app.use(cookieParser());
+
+app.use(
+    session({
+        secret: 'your_secret_key',
+        resave: false,
+        saveUninitialized: true,
+        cookie: {
+            maxAge: 3600000,
+            path: '/',
+            httpOnly: true,
+            sameSite: 'lax',
+        },
+    })
+);
 app.use(
     express.urlencoded({
         extended: true,
