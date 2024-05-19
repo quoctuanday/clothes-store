@@ -1,6 +1,7 @@
 'use client';
 import { useEffect, useState } from 'react';
 import { Users } from '@/schema/user';
+import Link from 'next/link';
 
 function LoginPage() {
     const [error, setError] = useState('');
@@ -66,32 +67,21 @@ function LoginPage() {
                 </>
             ) : (
                 <>
-                    <h1>Login</h1>
-                    <form onSubmit={handleLogin}>
-                        <label htmlFor="email">Email</label>
-                        <br />
-                        <input
-                            className="border-2"
-                            type="email"
-                            name="email"
-                            value={fields.email}
-                            onChange={setFieldValue}
-                            id="email"
-                        />
-                        <br />
-                        <label htmlFor="password">password</label>
-                        <br />
-                        <input
-                            className="border-2"
-                            type="password"
-                            name="password"
-                            value={fields.password}
-                            onChange={setFieldValue}
-                            id="password"
-                        />
-                        <br />
-                        <button>Login</button>
+                <div className='grid place-items-center h-screen'>
+                    <div className="shadow-lg p-5 rounded-lg border-t-4 border-green-400">
+                    <h1 className='text-xl font-bold my-4'>Nhập thông tin</h1>
+                    <form className='flex flex-col gap-3'>
+                    <input type="text" placeholder='Email' />
+                    <input type="password" placeholder='Password' />
+                    <button className="bg-green-600 text-white font-bold cursor-pointer px-6 py-2">
+                        Đăng nhập
+                    </button>
+                    <Link className="text-sm mt-3 text-right "href={'/signin'}>Không có tài khoản?<span className='underline'>Đăng ký</span></Link>
+                    
                     </form>
+                
+                </div>
+                </div>
                 </>
             )}
         </div>
