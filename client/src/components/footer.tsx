@@ -1,5 +1,5 @@
 'use client';
-import React from 'react';
+import React, { useState } from 'react';
 import {
     FaFacebook,
     FaInstagram,
@@ -10,12 +10,50 @@ import {
 import ProductData from '@/api/Product';
 import { MdEmail } from 'react-icons/md';
 import Image from 'next/image';
+import emailjs from 'emailjs-com';
 
 function Footer() {
     const products = ProductData();
     const uniqueTypes = Array.from(
         new Set(products.map((product) => product.type))
     );
+
+    const [formData, setFormData] = useState({
+        name: '',
+        email: '',
+        phone: '',
+        message: '',
+    });
+    const [status, setStatus] = useState('');
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        const { name, value } = e.target;
+        setFormData({
+            ...formData,
+            [name]: value,
+        });
+    };
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setStatus('Đang gửi...');
+
+        emailjs.send(
+            'service_b8sv9l8', // Service ID 
+            'template_2ggjwmf', // Template ID
+            formData,
+            'oWSWSNhtk3A_4rX4x' // User ID
+        )
+        .then((response) => {
+            console.log('SUCCESS!', response.status, response.text);
+            setStatus('Gửi tin nhắn thành công!');
+            setFormData({ name: '', email: '', phone: '', message: '' });
+        })
+        .catch((error) => {
+            console.error('FAILED...', error);
+            setStatus('Gửi tin nhắn thất bại. Vui lòng thử lại.');
+        });
+    };
 
     return (
         <div>
@@ -122,20 +160,55 @@ function Footer() {
                         </ul>
                     </div>
                     <div className="col-span-2">
-                        <h1 className="roboto-bold text-2xl pb-[30px]">
+                        <h1 className="roboto-bold text-2xl pb-4">
                             Phản hồi
                         </h1>
-                        <form action="">
+                        <form onSubmit={handleSubmit} className="space-y-4">
                             <input
-                                type="email"
-                                placeholder="example@.gmail.com"
+                                type="text"
+                                name="name"
+                                placeholder="Họ tên"
+                                value={formData.name}
+                                onChange={handleChange}
+                                required
                                 className="bg-transparent p-2 w-[300px] focus:outline-none focus:border-[#7000FF] border-b-2 border-[#636161] "
                             />
-                            <button className="bg-[#333] p-3 px-5 mt-[30px]  uppercase rounded text-white block roboto-regular hover:bg-[#7000FF] hover:text-white">
+                            <input
+                                type="email"
+                                name="email"
+                                placeholder="Email"
+                                value={formData.email}
+                                onChange={handleChange}
+                                required
+                                className="bg-transparent p-2 w-[300px] focus:outline-none focus:border-[#7000FF] border-b-2 border-[#636161] "
+                            />
+                            <input
+                                type="tel"
+                                name="phone"
+                                placeholder="Số điện thoại"
+                                value={formData.phone}
+                                onChange={handleChange}
+                                required
+                                className="bg-transparent p-2 w-[300px] focus:outline-none focus:border-[#7000FF] border-b-2 border-[#636161] "
+                            />
+                            <textarea
+                                name="message"
+                                placeholder="Tin nhắn"
+                                value={formData.message}
+                                onChange={handleChange}
+                                required
+                                className="bg-transparent p-2 w-[300px] focus:outline-none focus:border-[#7000FF] border-b-2 border-[#636161] "
+                            ></textarea>
+                             <button 
+                            type="submit"
+                            className="bg-[#333] p-3 px-5 mt-[30px]  uppercase rounded text-white block roboto-regular hover:bg-[#7000FF] hover:text-white"
+                            >
                                 Subcribe
                             </button>
                         </form>
+                        {status && <p className="mt-4 text-center text-gray-600">{status}</p>}
                     </div>
+
                 </div>
                 <div className="flex items-center justify-center max-h-[100px] overflow-hidden">
                     <Image
