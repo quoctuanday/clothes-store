@@ -6,13 +6,33 @@ import { CiUser } from 'react-icons/ci';
 import { RiBillLine } from 'react-icons/ri';
 import { IoIosLogOut } from 'react-icons/io';
 import { FiShoppingCart } from 'react-icons/fi';
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 function SidebarProfile() {
+    const router = useRouter();
+    const [logoutMessage, setLogoutMessage] = useState('');
     const user = UserLoginData();
-    const handleLogout = () => {
-        document.cookie =
-            'sessionId=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
-        clearUserData(); // Clear user data
+    const handleLogout = async () => {
+        try {
+            const response = await fetch('http://localhost:8000/auth/logout', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                credentials: 'include', // Đảm bảo cookie được gửi đi
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                setLogoutMessage(data.message);
+                clearUserData(); // Clear user data
+            } else {
+                throw new Error('Đăng xuất thất bại');
+            }
+        } catch (error) {
+            console.error('Lỗi khi đăng xuất');
+        }
     };
 
     return (
