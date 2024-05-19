@@ -23,7 +23,6 @@ class UserController {
     }
     addCart = (req, res, next) => {
         const userId = req.session.userId;
-        console.log(req.session.userId);
 
         if (!userId) {
             return res.json({

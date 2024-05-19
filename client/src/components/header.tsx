@@ -121,12 +121,17 @@ function Header() {
                 </div>
 
                 <div className="flex items-center">
-                    <div className="mr-[16px] hover:text-[#7000FF]">
-                        <FaUser />
-                    </div>
-                    <div className="hover:text-[#7000FF]">
-                        <FaShoppingCart />
-                    </div>
+                    {' '}
+                    <Link href="/profile">
+                        <div className="mr-[16px] hover:text-[#7000FF]">
+                            <FaUser />
+                        </div>
+                    </Link>
+                    <Link href="/cart">
+                        <div className="hover:text-[#7000FF]">
+                            <FaShoppingCart />
+                        </div>
+                    </Link>
                 </div>
             </nav>
         </div>
