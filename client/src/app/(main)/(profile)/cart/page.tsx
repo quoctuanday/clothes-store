@@ -86,24 +86,30 @@ function CartPage() {
                     {cartItems.map((item) => (
                         <div key={item._id}>
                             <div className="grid grid-cols-12 pl-5 gap-2  hover:bg-slate-200 py-3">
-                                <div className="col-span-4  flex items-center">
-                                    <Image
-                                        className="shadow rounded"
-                                        src={item.productId.image}
-                                        alt=""
-                                        width={124}
-                                        height={124}
-                                    ></Image>
+                                <div className="col-span-4 ">
+                                    <Link
+                                        href={`products/${item.productId._id}`}
+                                    >
+                                        <div className="flex items-center">
+                                            <Image
+                                                className="shadow rounded"
+                                                src={item.productId.image}
+                                                alt=""
+                                                width={124}
+                                                height={124}
+                                            ></Image>
 
-                                    <div className="ml-3">
-                                        <h1 className="line-clamp-2 roboto-regular max-w-[175px]">
-                                            {item.productId.productName}
-                                        </h1>
-                                        <span className="line-clamp-2 roboto-thin text-[#717171] text-sm">
-                                            {item.productId.color},{' '}
-                                            {item.productId.size}
-                                        </span>
-                                    </div>
+                                            <div className="ml-3">
+                                                <h1 className="line-clamp-2 roboto-regular max-w-[175px]">
+                                                    {item.productId.productName}
+                                                </h1>
+                                                <span className="line-clamp-2 roboto-thin text-[#717171] text-sm">
+                                                    {item.productId.color},{' '}
+                                                    {item.productId.size}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </Link>
                                 </div>
 
                                 <div className="col-span-2 flex items-center roboto-regular">

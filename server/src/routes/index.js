@@ -5,8 +5,10 @@ const newsRouter = require('./news');
 const authRouter = require('./auth');
 const userRouter = require('./user');
 const cartRouter = require('./cart');
+const orderRouter = require('./order');
 
 function route(app) {
+    app.use('/order', orderRouter);
     app.use('/cart', cartRouter);
     app.use('/user', userRouter);
     app.use('/auth', authRouter);

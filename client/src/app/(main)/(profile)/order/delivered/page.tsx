@@ -5,7 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 // Định nghĩa kiểu dữ liệu
 
-function OrderPage() {
+function DeliverPage() {
     const [orders, setOrders] = useState<order[]>([]);
     const [error, setError] = useState<string | null>(null);
 
@@ -21,7 +21,7 @@ function OrderPage() {
 
                 const data = await response.json();
                 const pendingOrders = data.orders.filter(
-                    (order: order) => order.status === 'Chờ xử lí'
+                    (order: order) => order.status === 'Đã giao'
                 );
                 setOrders(pendingOrders || []);
             } catch (error) {
@@ -31,62 +31,6 @@ function OrderPage() {
         };
         fetchData();
     }, []);
-
-    const cancelOrder = async (orderId: string) => {
-        try {
-            const response = await fetch(
-                `http://localhost:8000/order/${orderId}`,
-                {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ status: 'Đã hủy' }),
-                }
-            );
-            if (!response.ok) {
-                throw new Error('Không thể hủy đơn hàng');
-            }
-            const updatedOrders = orders.map((order) => {
-                if (order._id === orderId) {
-                    return { ...order, status: 'Đã hủy' };
-                }
-                return order;
-            });
-            setOrders(updatedOrders);
-        } catch (error) {
-            console.error(error);
-            setError('Không thể hủy đơn hàng.');
-        }
-    };
-
-    const paymentOrder = async (orderId: string) => {
-        try {
-            const response = await fetch(
-                `http://localhost:8000/order/${orderId}`,
-                {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ paymentStatus: 'Đã thanh toán' }),
-                }
-            );
-            if (!response.ok) {
-                throw new Error('Không thể hủy thanh toán');
-            }
-            const updatedOrders = orders.map((order) => {
-                if (order._id === orderId) {
-                    return { ...order, status: 'Đã hủy' };
-                }
-                return order;
-            });
-            setOrders(updatedOrders);
-        } catch (error) {
-            console.error(error);
-            setError('Không thể hủy đơn hàng.');
-        }
-    };
 
     return (
         <div>
@@ -138,27 +82,13 @@ function OrderPage() {
                                     </div>
                                 </div>
                                 <div className=" flex items-center justify-end text-white roboto-regular mb-4">
-                                    <button
-                                        className={`p-1 ${
-                                            item.paymentStatus ===
-                                            'Đã thanh toán'
-                                                ? 'bg-gray-400 cursor-not-allowed'
-                                                : 'bg-[#6f00ff] hover:bg-[#6f00ffdf]'
-                                        } rounded mr-2`}
-                                        onClick={() => paymentOrder(item._id)}
-                                        disabled={
-                                            item.paymentStatus ===
-                                            'Đã thanh toán'
-                                        }
+                                    <Link
+                                        href={`/products/${item.productId._id}`}
                                     >
-                                        Thanh toán
-                                    </button>
-                                    <button
-                                        className="p-1 bg-[#ec5d5d] hover:bg-[#ec5d5dd7] rounded mr-2"
-                                        onClick={() => cancelOrder(item._id)}
-                                    >
-                                        Hủy đơn hàng
-                                    </button>
+                                        <button className="p-1 px-3  bg-[#6816d3]  rounded mr-10">
+                                            Mua lại
+                                        </button>
+                                    </Link>
                                 </div>
                             </div>
                         ))}
@@ -169,4 +99,4 @@ function OrderPage() {
     );
 }
 
-export default OrderPage;
+export default DeliverPage;
