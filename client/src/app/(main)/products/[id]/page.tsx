@@ -63,45 +63,34 @@ export default function ProductDetail({ params }: { params: { id: string } }) {
     }
 
     return (
-        <div>
-            <div className="px-[40px] grid grid-cols-2 mt-[50px] gap-[40px]  ">
-                <div className="col-span-1 flex justify-center items-center ">
-                    <Image
-                        src={product.image}
-                        alt="anh san pham"
-                        width={420}
-                        height={420}
-                    />
-                </div>
-                <div className="col-span-1 text-start">
-                    <h1 className="font-extrabold text-4xl">
-                        {product.productName}
-                    </h1>
-                    <span className="text-2xl font-semibold block mb-4 leading-normal mt-2">
-                        Giá sản phẩm: {product.price} VND
-                    </span>
-                    <span className="text-2xl font-semibold block mb-4 leading-normal">
-                        Thương hiệu: {product.branch}
-                    </span>
-                    <span className="text-2xl font-semibold block mb-4 leading-normal">
-                        Màu sắc : {product.color}
-                    </span>
-                    <span className="text-2xl font-semibold block mb-4 leading-normal">
-                        Chất liệu : {product.material}
-                    </span>
-                    <span className="text-2xl font-semibold block mb-4 leading-normal">
-                        Kích cỡ: {product.size}
-                    </span>
-                    <span className="text-2xl font-semibold block mb-4 leading-normal">
-                        Mô tả sản phẩm: {product.description}
-                    </span>
-                    <div className="flex items-center">
+        <div className="container mx-auto px-4 py-8">
+            <div className="bg-white shadow-md rounded-lg p-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div className="flex justify-center items-center">
+                        <Image
+                            src={product.image}
+                            alt={product.productName}
+                            width={420}
+                            height={420}
+                            className="rounded-lg shadow-md"
+                        />
+                    </div>
+                    <div className="flex flex-col">
+                        <h1 className="font-extrabold text-4xl mb-4">
+                            {product.productName}
+                        </h1>
+                        <p className="text-2xl font-semibold mb-4">
+                            Giá sản phẩm: {product.price.toLocaleString()} VND
+                        </p>
+                        <p className="text-xl mb-2"><strong>Thương hiệu:</strong> {product.branch}</p>
+                        <p className="text-xl mb-2"><strong>Màu sắc:</strong> {product.color}</p>
+                        <p className="text-xl mb-2"><strong>Chất liệu:</strong> {product.material}</p>
+                        <p className="text-xl mb-2"><strong>Kích cỡ:</strong> {product.size}</p>
+                        <p className="text-xl mb-4"><strong>Mô tả sản phẩm:</strong> {product.description}</p>
                         <div className="flex items-center mt-4">
                             <button
-                                onClick={() =>
-                                    setQuantity(quantity > 1 ? quantity - 1 : 1)
-                                }
-                                className="p-2 px-4 rounded bg-gray-300 text-black hover:bg-gray-400"
+                                onClick={() => setQuantity(quantity > 1 ? quantity - 1 : 1)}
+                                className="p-2 px-4 rounded-l bg-gray-200 text-black hover:bg-gray-300"
                             >
                                 -
                             </button>
@@ -109,19 +98,19 @@ export default function ProductDetail({ params }: { params: { id: string } }) {
                                 type="number"
                                 value={quantity}
                                 onChange={handleQuantityChange}
-                                className="mx-4 text-2xl font-semibold text-center border rounded p-2 "
+                                className="w-16 text-2xl font-semibold text-center border-t border-b border-gray-200"
                                 min="1"
                             />
                             <button
                                 onClick={() => setQuantity(quantity + 1)}
-                                className="p-2 px-4 rounded bg-gray-300 text-black hover:bg-gray-400"
+                                className="p-2 px-4 rounded-r bg-gray-200 text-black hover:bg-gray-300"
                             >
                                 +
                             </button>
                         </div>
                         <button
                             onClick={handleAddToCart}
-                            className="mt-4 ml-6 p-2 rounded bg-[#7000FF] text-white hover:bg-[#6816d3] roboto-regular"
+                            className="mt-4 p-2 w-full rounded bg-[#7000FF] text-white hover:bg-[#6816d3] transition-colors"
                         >
                             Thêm vào giỏ hàng
                         </button>

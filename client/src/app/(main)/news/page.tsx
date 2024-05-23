@@ -11,7 +11,7 @@ const NewsPage = () => {
     const [mainNews, setMainNews] = useState<News[]>([]);
     const [secondaryNews, setSecondaryNews] = useState<News[]>([]);
     const [currentPage, setCurrentPage] = useState(1);
-    const pageSize = 8;
+    const pageSize = 4;
 
     useEffect(() => {
         const getNewsData = async () => {
@@ -98,9 +98,7 @@ const NewsPage = () => {
                 nextLabel="next >"
                 onPageChange={onPageChange}
                 pageRangeDisplayed={2}
-                pageCount={Math.ceil(
-                    (mainNews.length + secondaryNews.length) / pageSize
-                )}
+                pageCount={Math.ceil(secondaryNews.length / pageSize)}
                 previousLabel="< previous"
                 renderOnZeroPageCount={null}
                 containerClassName="pagination"
@@ -118,18 +116,12 @@ const NewsPage = () => {
                         : ''
                 }`}
                 nextClassName={`rounded mx-2 px-2 h-[32px] border flex items-center justify-center  hover:bg-[#7000FF] ${
-                    currentPage ===
-                    Math.ceil(
-                        (mainNews.length + secondaryNews.length) / pageSize
-                    )
+                    currentPage === Math.ceil(secondaryNews.length / pageSize)
                         ? 'cursor-not-allowed text-gray-400 hover:bg-white hover:text-gray-400'
                         : ''
                 }`}
                 nextLinkClassName={`page-link ${
-                    currentPage ===
-                    Math.ceil(
-                        (mainNews.length + secondaryNews.length) / pageSize
-                    )
+                    currentPage === Math.ceil(secondaryNews.length / pageSize)
                         ? 'cursor-not-allowed pointer-events-none'
                         : ''
                 }`}
