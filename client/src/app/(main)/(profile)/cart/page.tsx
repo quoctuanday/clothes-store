@@ -4,11 +4,11 @@ import { CartItems } from '@/schema/cartItem';
 import Image from 'next/image';
 import { BiTrash } from 'react-icons/bi';
 import Link from 'next/link';
-// Định nghĩa kiểu dữ liệu
 
 function CartPage() {
     const [cartItems, setCartItems] = useState<CartItems[]>([]);
     const [error, setError] = useState<string | null>(null);
+    const [itemToRemove, setItemToRemove] = useState<string | null>(null);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -31,9 +31,13 @@ function CartPage() {
     }, []);
 
     const handleRemoveFromCart = async (itemId: string) => {
+        setItemToRemove(itemId);
+    };
+
+    const confirmRemoveFromCart = async () => {
         try {
             const response = await fetch(
-                `http://localhost:8000/cart/${itemId}`,
+                `http://localhost:8000/cart/${itemToRemove}`,
                 {
                     method: 'DELETE',
                     credentials: 'include',
@@ -44,12 +48,17 @@ function CartPage() {
             }
             // Xóa mục khỏi giỏ hàng cục bộ
             setCartItems((prevCartItems) =>
-                prevCartItems.filter((item) => item._id !== itemId)
+                prevCartItems.filter((item) => item._id !== itemToRemove)
             );
+            setItemToRemove(null);
         } catch (error) {
             console.log(error);
             setError('Không thể xóa sản phẩm khỏi giỏ hàng.');
         }
+    };
+
+    const cancelRemoveFromCart = () => {
+        setItemToRemove(null);
     };
 
     return (
@@ -139,6 +148,31 @@ function CartPage() {
                             </div>
                         </div>
                     ))}
+                    {itemToRemove && (
+                        <div className="fixed top-0 left-0 w-full h-full bg-gray-800 bg-opacity-50 flex justify-center items-center">
+                            <div className="bg-white p-5 rounded-lg">
+                                <p className="text-lg font-bold mb-3">
+                                    Bạn có chắc chắn muốn xóa sản phẩm này khỏi giỏ hàng?
+                                </p>
+                                <div className="flex justify-center">
+                                <a href="http://localhost:3000/cart">
+                                    <button
+                                        className="bg-red-500 text-white px-4 py-2 rounded mr-3"
+                                        onClick={confirmRemoveFromCart}
+                                    >
+                                        Đồng ý
+                                    </button>
+                                </a>
+                                    <button
+                                        className="bg-gray-400 text-white px-4 py-2 rounded"
+                                        onClick={cancelRemoveFromCart}
+                                    >
+                                        Hủy
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
                 </>
             )}
         </div>

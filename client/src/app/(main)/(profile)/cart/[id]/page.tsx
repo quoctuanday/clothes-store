@@ -5,7 +5,6 @@ import Image from 'next/image';
 import UserLoginData from '@/api/UserLogin';
 import { BiLocationPlus } from 'react-icons/bi';
 import { FaLocationDot } from 'react-icons/fa6';
-import { CheckIcon } from '@radix-ui/react-icons';
 import { CgCheck } from 'react-icons/cg';
 
 function BuyItemPage({ params }: { params: { id: string } }) {
@@ -58,7 +57,24 @@ function BuyItemPage({ params }: { params: { id: string } }) {
 
             const result = await response.json();
             console.log('Order created successfully:', result);
-            // Optionally redirect or show a success message
+
+            // Xóa món hàng đã đặt khỏi giỏ hàng
+            await fetch(`http://localhost:8000/cart/${cartItems._id}`, {
+                method: 'DELETE',
+                credentials: 'include',
+            });
+
+            // Đặt lại giỏ hàng sau khi xóa món hàng
+            const updatedCartResponse = await fetch('http://localhost:8000/cart', {
+                credentials: 'include',
+            });
+            if (!updatedCartResponse.ok) {
+                throw new Error('Failed to update cart');
+            }
+            const updatedCartData = await updatedCartResponse.json();
+            setCartItems(updatedCartData.cartItem || null);
+
+            // Optional: Redirect to order page or show success message
         } catch (error) {
             console.error('Error creating order:', error);
         }
@@ -166,12 +182,14 @@ function BuyItemPage({ params }: { params: { id: string } }) {
             </div>
             <div className="grid grid-cols-4 mt-3 mb-5 mx-5 ">
                 <div className="flex justify-center col-start-4 col-span-1 text-sm roboto-thin items-center ">
+                <a href="http://localhost:3000/order">
                     <button
                         className="col-span-1 py-2 w-full rounded bg-[#7000FF] hover:bg-[#6f00ffc6] text-white text-center "
                         onClick={handleOrder}
                     >
                         Đặt hàng
                     </button>
+                </a>
                 </div>
             </div>
         </div>

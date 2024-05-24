@@ -4,6 +4,7 @@ import { fetchNewsData } from '@/api/News';
 import Link from 'next/link';
 import Image from 'next/image';
 import { News } from '@/schema/news';
+import { motion } from 'framer-motion';
 
 function HotNews() {
     const [news, setNews] = useState<News[]>([]);
@@ -30,9 +31,11 @@ function HotNews() {
             </div>
             <div className="grid grid-cols-4 gap-[20px] mt-10">
                 {hotNews.map((news) => (
-                    <div
+                    <motion.div
                         key={news._id}
                         className="shadow-lg news-item rounded overflow-hidden mb-6 transition-transform transform hover:scale-105 hover:shadow-2xl"
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
                     >
                         <Link href={`/news/${news._id}`}>
                             <div className="relative group">
@@ -58,7 +61,7 @@ function HotNews() {
                                 </h3>
                             </div>
                         </Link>
-                    </div>
+                    </motion.div>
                 ))}
             </div>
         </div>

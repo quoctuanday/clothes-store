@@ -21,10 +21,13 @@ class UserController {
                 next(error);
             });
     }
+
     addCart = (req, res, next) => {
         const userId = req.session.userId;
+        console.log('Session userId:', userId); // Logging userId
 
         if (!userId) {
+            console.log('Session not found'); // Log if session not found
             return res.json({
                 message: 'Phiên không được tìm thấy',
             });
@@ -32,10 +35,19 @@ class UserController {
 
         Cart.findOne({ userId })
             .then(cart => {
+                console.log('Found cart:', cart); // Logging cart
+
                 if (!cart) {
-                    return res.json({
-                        message: 'Giỏ hàng không được tìm thấy',
-                    });
+                    // If no cart is found, create a new one
+                    const newCart = new Cart({ userId });
+                    return newCart.save();
+                }
+
+                return cart;
+            })
+            .then(cart => {
+                if (!cart) {
+                    return Promise.reject(new Error('Cart not created'));
                 }
 
                 const data = req.body;
@@ -44,17 +56,26 @@ class UserController {
                 const cartItem = new CartItems(data);
                 return cartItem.save();
             })
-            .then(() => {
-                return res.status(200).json({
+            .then(savedCartItem => {
+                console.log('Saved cart item:', savedCartItem); // Logging saved cart item
+                res.status(200).json({
                     message: 'Sản phẩm đã được thêm vào giỏ hàng',
                 });
             })
             .catch(err => {
-                console.error(err);
-                return res.status(500).json({
+                if (err.message === 'Cart not created') {
+                    console.error('Error creating cart'); // Log cart creation error
+                    return res.status(500).json({
+                        message: 'Đã xảy ra lỗi khi tạo giỏ hàng',
+                    });
+                }
+
+                console.error('Error:', err); // Logging other errors
+                res.status(500).json({
                     message: 'Đã xảy ra lỗi',
                 });
             });
     };
 }
+
 module.exports = new UserController();
