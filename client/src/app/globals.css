@@ -101,3 +101,7 @@
         font-style: italic;
     }
 }
+
+.input-reset-password {
+    @apply w-[400px] border border-gray-200 py-2 px-6;
+}

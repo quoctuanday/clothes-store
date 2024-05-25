@@ -113,6 +113,11 @@ function LoginPage() {
                                 Không có tài khoản?
                                 <span className="underline ml-1">Đăng ký</span>
                             </Link>
+                            <Link className="text-sm mt-3 text-right" href={'/resetpassword'}>
+                                <button className="bg-green-600 text-white font-bold cursor-pointer px-6 py-2 rounded-md mt-3">
+                                    Quên mật khẩu?
+                                </button>
+                            </Link>
                         </div>
                     </div>
                 </div>
