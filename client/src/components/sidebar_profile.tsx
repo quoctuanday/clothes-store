@@ -89,12 +89,14 @@ function SidebarProfile() {
                             <div>
                                 <IoIosLogOut />
                             </div>
+                            <a href = "/login">
                             <button
                                 onClick={handleLogout}
                                 className="p-3 block roboto-regular text-xl"
                             >
                                 Đăng xuất
                             </button>
+                            </a>
                         </li>
                     </ul>
                 </>

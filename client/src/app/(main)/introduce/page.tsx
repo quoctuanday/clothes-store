@@ -18,11 +18,11 @@ const Introduce = () => {
                 >
                     <h1 className="text-6xl font-extrabold text-gray-900 mb-6">
                         Giới Thiệu{' '}
-                        <span className="text-blue-600">CLOTHES-STORE</span>
+                        <span className="text-blue-600">FASHION SHOP</span>
                     </h1>
                     <p className="text-2xl text-gray-700 max-w-3xl mx-auto">
-                        Thương hiệu thời trang CLOTHES-STORE được thành lập từ
-                        tháng 3 năm 2018, là thương hiệu thời trang uy tín hàng
+                        Thương hiệu thời trang FASHION SHOP được thành lập từ
+                        tháng 3 năm 2024, là thương hiệu thời trang uy tín hàng
                         đầu tại Việt Nam.
                     </p>
                 </motion.div>
@@ -44,7 +44,7 @@ const Introduce = () => {
                             Hàng những trải nghiệm mua sắm đặc biệt nhất: sản
                             phẩm chất lượng - dịch vụ hoàn hảo - xu hướng thời
                             trang mới mẻ và tinh tế. Thông qua các sản phẩm thời
-                            trang, CLOTHES-STORE luôn mong muốn truyền tải đến
+                            trang, FASHION SHOP luôn mong muốn truyền tải đến
                             bạn những thông điệp tốt đẹp cùng với nguồn cảm hứng
                             trẻ trung và tích cực.
                         </p>
