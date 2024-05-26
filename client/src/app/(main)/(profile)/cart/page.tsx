@@ -30,21 +30,31 @@ function CartPage() {
         fetchData();
     }, []);
 
+    useEffect(() => {
+        const totalItems = cartItems.length;
+        localStorage.setItem('cartItemCount', totalItems.toString());
+    }, [cartItems]);
+
     const handleRemoveFromCart = async (itemId: string) => {
         setItemToRemove(itemId);
     };
 
     const confirmRemoveFromCart = async () => {
         try {
-            const response = await fetch(`http://localhost:8000/cart/${itemToRemove}`, {
-                method: 'DELETE',
-                credentials: 'include',
-            });
+            const response = await fetch(
+                `http://localhost:8000/cart/${itemToRemove}`,
+                {
+                    method: 'DELETE',
+                    credentials: 'include',
+                }
+            );
             if (!response.ok) {
                 throw new Error('Không thể xóa sản phẩm khỏi giỏ hàng');
             }
             // Xóa mục khỏi giỏ hàng cục bộ
-            setCartItems((prevCartItems) => prevCartItems.filter((item) => item._id !== itemToRemove));
+            setCartItems((prevCartItems) =>
+                prevCartItems.filter((item) => item._id !== itemToRemove)
+            );
             setItemToRemove(null);
         } catch (error) {
             console.log(error);
@@ -67,31 +77,43 @@ function CartPage() {
                 </div>
             ) : (
                 <>
-                    <div className="mb-5">
+                    <div className="">
                         <div className="grid grid-cols-12 gap-2 p-3 font-bold border-b-2">
                             <div className="col-span-4">Mô tả sản phẩm</div>
-                            <div className="col-span-2 text-center">Đơn giá</div>
-                            <div className="col-span-1 text-center">Số lượng</div>
-                            <div className="col-span-2 text-center">Thành tiền</div>
-                            <div className="col-span-3 text-center">Thao tác</div>
+                            <div className="col-span-2 text-center">
+                                Đơn giá
+                            </div>
+                            <div className="col-span-1 w-[65px]">Số lượng</div>
+                            <div className="col-span-2 text-center">
+                                Thành tiền
+                            </div>
+                            <div className="col-span-3 text-center">
+                                Thao tác
+                            </div>
                         </div>
                     </div>
                     {cartItems.map((item) => (
                         <div key={item._id} className="border-b-2">
                             <div className="grid grid-cols-12 gap-2 py-3 hover:bg-slate-200">
                                 <div className="col-span-4 flex items-center">
-                                    <Link href={`products/${item.productId._id}`} className="flex items-center">
+                                    <Link
+                                        href={`products/${item.productId._id}`}
+                                        className="flex items-center"
+                                    >
                                         <Image
-                                            className="shadow rounded"
+                                            className="shadow rounded ml-2"
                                             src={item.productId.image}
                                             alt={item.productId.productName}
                                             width={124}
                                             height={124}
                                         />
                                         <div className="ml-3">
-                                            <h1 className="line-clamp-2 font-medium">{item.productId.productName}</h1>
+                                            <h1 className="line-clamp-2 font-medium">
+                                                {item.productId.productName}
+                                            </h1>
                                             <span className="line-clamp-2 text-gray-500 text-sm">
-                                                {item.productId.color}, {item.productId.size}
+                                                {item.productId.color},{' '}
+                                                {item.productId.size}
                                             </span>
                                         </div>
                                     </Link>
@@ -113,7 +135,9 @@ function CartPage() {
                                     </Link>
                                     <button
                                         className="px-4 py-2 bg-red-500 hover:bg-[#f37575] text-white rounded flex items-center space-x-1"
-                                        onClick={() => handleRemoveFromCart(item._id)}
+                                        onClick={() =>
+                                            handleRemoveFromCart(item._id)
+                                        }
                                     >
                                         <BiTrash size={20} />
                                         <span>Xóa</span>
@@ -126,17 +150,17 @@ function CartPage() {
                         <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center">
                             <div className="bg-white p-5 rounded-lg shadow-lg">
                                 <p className="text-lg font-bold mb-3">
-                                    Bạn có chắc chắn muốn xóa sản phẩm này khỏi giỏ hàng?
+                                    Bạn có chắc chắn muốn xóa sản phẩm này khỏi
+                                    giỏ hàng?
                                 </p>
                                 <div className="flex justify-center">
-                                    <a href='/cart'>
                                     <button
                                         className="bg-red-500 text-white px-4 py-2 rounded mr-3"
                                         onClick={confirmRemoveFromCart}
                                     >
                                         Đồng ý
                                     </button>
-                                    </a>
+
                                     <button
                                         className="bg-gray-400 text-white px-4 py-2 rounded"
                                         onClick={cancelRemoveFromCart}
@@ -149,7 +173,9 @@ function CartPage() {
                     )}
                 </>
             )}
-            {error && <div className="text-red-500 text-center mt-4">{error}</div>}
+            {error && (
+                <div className="text-red-500 text-center mt-4">{error}</div>
+            )}
         </div>
     );
 }

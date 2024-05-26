@@ -150,23 +150,23 @@ const NewsPage = () => {
                     activeClassName=" text-white bg-[#7000FF]"
                     pageClassName=" rounded mx-2 w-[32px] h-[32px] border flex items-center justify-center hover:text-white hover:bg-[#7000FF]"
                     pageLinkClassName="page-link"
-                    previousClassName={`rounded mx-2 px-2 h-[32px] border flex items-center justify-center hover:bg-[#7000FF] ${
+                    previousClassName={`rounded mx-2 px-2 h-[32px] border flex items-center justify-center  ${
                         currentPage === 1
-                            ? 'cursor-not-allowed text-gray-400 hover:bg-white hover:text-gray-400'
-                            : ''
+                            ? 'cursor-not-allowed text-gray-400'
+                            : 'hover:bg-[#7000FF] text-white'
                     }`}
                     previousLinkClassName={`page-link ${
                         currentPage === 1
-                            ? 'cursor-not-allowed pointer-events-none hover:bg-white hover:text-gray-400'
-                            : ''
+                            ? 'cursor-not-allowed pointer-events-none '
+                            : 'hover:bg-[#7000FF] text-white'
                     }`}
-                    nextClassName={`rounded mx-2 px-2 h-[32px] border flex items-center justify-center  hover:bg-[#7000FF] ${
+                    nextClassName={`rounded mx-2 px-2 h-[32px] border flex items-center justify-center   ${
                         currentPage ===
                         Math.ceil(
                             (mainNews.length + secondaryNews.length) / pageSize
                         )
-                            ? 'cursor-not-allowed text-gray-400 hover:bg-white hover:text-gray-400'
-                            : ''
+                            ? 'cursor-not-allowed text-gray-400 '
+                            : 'hover:bg-[#7000FF]'
                     }`}
                     nextLinkClassName={`page-link ${
                         currentPage ===
@@ -174,14 +174,14 @@ const NewsPage = () => {
                             (mainNews.length + secondaryNews.length) / pageSize
                         )
                             ? 'cursor-not-allowed pointer-events-none'
-                            : ''
+                            : 'hover:bg-[#7000FF]'
                     }`}
                     breakClassName="page-item"
                     breakLinkClassName="page-link"
                 />
             </div>
         </div>
-);
+    );
 };
 
 export default NewsPage;

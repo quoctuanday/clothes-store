@@ -7,6 +7,7 @@ import Link from 'next/link';
 
 function ProfilePage() {
     const user = UserLoginData();
+
     return (
         <div className="p-5">
             <h1 className="capitalize roboto-bold text-2xl mb-2">

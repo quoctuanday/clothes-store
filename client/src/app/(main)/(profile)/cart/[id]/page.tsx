@@ -9,11 +9,13 @@ import { CgCheck } from 'react-icons/cg';
 function BuyItemPage({ params }: { params: { id: string } }) {
     const user = UserLoginData();
     const [cartItems, setCartItems] = useState<CartItems | null>(null);
-    
+
     useEffect(() => {
         const fetchItemDetail = async () => {
             try {
-                const response = await fetch(`http://localhost:8000/cart/${params.id}`);
+                const response = await fetch(
+                    `http://localhost:8000/cart/${params.id}`
+                );
                 if (!response.ok) {
                     throw new Error('Failed to fetch item detail');
                 }
@@ -37,13 +39,16 @@ function BuyItemPage({ params }: { params: { id: string } }) {
         };
 
         try {
-            const response = await fetch('http://localhost:8000/admin/orders/create', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(orderData),
-            });
+            const response = await fetch(
+                'http://localhost:8000/admin/orders/create',
+                {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(orderData),
+                }
+            );
 
             if (!response.ok) {
                 throw new Error('Failed to create order');
@@ -56,15 +61,6 @@ function BuyItemPage({ params }: { params: { id: string } }) {
                 method: 'DELETE',
                 credentials: 'include',
             });
-
-            const updatedCartResponse = await fetch('http://localhost:8000/cart', {
-                credentials: 'include',
-            });
-            if (!updatedCartResponse.ok) {
-                throw new Error('Failed to update cart');
-            }
-            const updatedCartData = await updatedCartResponse.json();
-            setCartItems(updatedCartData.cartItem || null);
         } catch (error) {
             console.error('Error creating order:', error);
         }
@@ -106,7 +102,8 @@ function BuyItemPage({ params }: { params: { id: string } }) {
                             {cartItems.productId.productName}
                         </h1>
                         <span className="line-clamp-2 text-gray-500 text-sm">
-                            {cartItems.productId.color}, {cartItems.productId.size}
+                            {cartItems.productId.color},{' '}
+                            {cartItems.productId.size}
                             <div>Loại: {cartItems.productId.type}</div>
                         </span>
                     </div>

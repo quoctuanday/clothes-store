@@ -37,7 +37,7 @@ class CartController {
     }
     removeItems(req, res, next) {
         CartItems.deleteOne({ _id: req.params.id })
-            .then(() => res.redirect('back'))
+            .then(() => res.send('Remove successfully'))
             .catch(next);
     }
     showOrderDetails(req, res, next) {

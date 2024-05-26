@@ -13,22 +13,42 @@ class AdminController {
         const productCountPromise = Product.countDocuments({});
         const bannerCountPromise = Banner.countDocuments({});
         const userCountPromise = User.countDocuments({});
-        const soldPromise = Product.countDocuments({ status: 'Đã bán' });
+        const newsCountPromise = SecondaryNews.countDocuments({});
+        const soldPromise = Product.aggregate([
+            {
+                $group: {
+                    _id: null,
+                    totalSold: { $sum: '$quantitySold' },
+                },
+            },
+        ]);
 
         Promise.all([
             productCountPromise,
-            soldPromise,
             bannerCountPromise,
             userCountPromise,
+            newsCountPromise,
+            soldPromise,
         ])
-            .then(([productCount, soldCount, bannerCount, userCount]) => {
-                res.render('admin/home', {
+            .then(
+                ([
                     productCount,
-                    soldCount,
                     bannerCount,
                     userCount,
-                });
-            })
+                    newsCount,
+                    soldResult,
+                ]) => {
+                    const soldCount =
+                        soldResult.length > 0 ? soldResult[0].totalSold : 0;
+                    res.render('admin/home', {
+                        productCount,
+                        soldCount,
+                        bannerCount,
+                        userCount,
+                        newsCount,
+                    });
+                }
+            )
             .catch(error => {
                 console.error('Lỗi khi đếm số lượng sản phẩm:', error);
                 next(error);
@@ -278,7 +298,7 @@ class AdminController {
 
                 return orderDetail.save();
             })
-            .then(() => res.send('Tạo order và order detail thành công'))
+            .then(() => res.json('Tạo order và order detail thành công'))
             .catch(err => {
                 console.error('Lỗi khi tạo order hoặc order detail', err);
                 next(err);
