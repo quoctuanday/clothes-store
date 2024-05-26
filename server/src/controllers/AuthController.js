@@ -100,7 +100,8 @@ class AuthController {
             });
     }
     resetPassword(req, res, next){
-        alert('Calling resetPassword function');  
+        console.log('HÀM RESET PASSWORD ĐÃ ĐƯỢC GỌI THÀNH CÔNG:', email); // Debugging log
+  
 
         const transporter = nodemailer.createTransport({
             
@@ -115,7 +116,7 @@ class AuthController {
         // Thiết lập email
         const mailOptions = {
             from: 'clothesshop@gmail.com', // Địa chỉ email gửi
-            to: 'letheha6@gmail.com',     // Địa chỉ email nhận
+            to: req.body.email,     // Địa chỉ email nhận
             subject: 'Password Reset',     // Tiêu đề email
             text: `You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n
                    Please click on the following link, or paste this into your browser to complete the process:\n\n

@@ -1,11 +1,11 @@
 'use client'
 import React, { useState } from 'react';
-import axios from 'axios';
 
 export default function ResetPassword() {
     const [email, setEmail] = useState('');
 
     const handleResetPassword = async () => { 
+        console.log('HÀM RESET PASSWORD ĐÃ ĐƯỢC GỌI THÀNH CÔNG:', email); // Debugging log
 
         try {
             const response = await fetch('http://localhost:8000/auth/sendmail', { 
@@ -20,10 +20,10 @@ export default function ResetPassword() {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
             const data = await response.json();
-            console.log(data);
+            console.log('Server response:', data);
             alert('Email đã được gửi đi!');
         } catch (error) {
-            console.error('Lỗi r nha :', error);
+            console.error('Error sending reset password email:', error);
             alert('Đã xảy ra lỗi khi gửi email.');
         }
     };
