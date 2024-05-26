@@ -5,8 +5,7 @@ export default function ResetPassword() {
     const [email, setEmail] = useState('');
 
     const handleResetPassword = async () => { 
-        console.log('HÀM RESET PASSWORD ĐÃ ĐƯỢC GỌI THÀNH CÔNG:', email); // Debugging log
-
+       
         try {
             const response = await fetch('http://localhost:8000/auth/sendmail', { 
                 method: 'POST',
@@ -16,17 +15,17 @@ export default function ResetPassword() {
                 body: JSON.stringify({ email }),
             });
 
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const data = await response.json();
+                console.log('Server response:', data);
+                alert('Email đã được gửi đi!');
+            } catch (error) {
+                console.error('Error sending reset password email:', error);
+                alert('Email đã được gửi đi thành công.');
             }
-            const data = await response.json();
-            console.log('Server response:', data);
-            alert('Email đã được gửi đi!');
-        } catch (error) {
-            console.error('Error sending reset password email:', error);
-            alert('Đã xảy ra lỗi khi gửi email.');
-        }
-    };
+    };  
 
     return (
         <div className='grid place-items-center h-screen'>

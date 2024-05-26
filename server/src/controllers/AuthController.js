@@ -100,6 +100,14 @@ class AuthController {
             });
     }
     resetPassword(req, res, next){
+        
+        const { email } = req.body;
+
+    if (!email) {
+        return res.status(400).send('Email is required');
+    }
+
+
         console.log('HÀM RESET PASSWORD ĐÃ ĐƯỢC GỌI THÀNH CÔNG:', email); // Debugging log
   
 
@@ -118,10 +126,10 @@ class AuthController {
             from: 'clothesshop@gmail.com', // Địa chỉ email gửi
             to: req.body.email,     // Địa chỉ email nhận
             subject: 'Password Reset',     // Tiêu đề email
-            text: `You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n
-                   Please click on the following link, or paste this into your browser to complete the process:\n\n
+            text: `Bạn nhận được thông báo này vì bạn (hoặc người khác) đã yêu cầu đặt lại mật khẩu cho tài khoản của mình.\n\n
+            Vui lòng nhấp vào liên kết sau hoặc dán liên kết này vào trình duyệt của bạn để hoàn tất quá trình:\n\n
                    http://localhost:3000/newpassword/token\n\n
-                   If you did not request this, please ignore this email and your password will remain unchanged.\n`
+                   Nếu bạn không thực hiện điều này cứ mặc kệ nó.\n`
         };
 
         // Gửi email
