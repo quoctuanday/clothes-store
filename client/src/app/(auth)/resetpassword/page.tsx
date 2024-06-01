@@ -22,8 +22,8 @@ export default function ResetPassword() {
                 console.log('Server response:', data);
                 alert('Email đã được gửi đi!');
             } catch (error) {
-                console.error('Error sending reset password email:', error);
                 alert('Email đã được gửi đi thành công.');
+                
             }
     };  
 
@@ -38,7 +38,7 @@ export default function ResetPassword() {
                         className='input-reset-password' 
                         value={email} 
                         onChange={(e) => setEmail(e.target.value)} // Cập nhật giá trị của email
-                        required
+                        required autoFocus
                     />
                     <button 
                         type="submit" 

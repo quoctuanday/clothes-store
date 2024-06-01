@@ -1,6 +1,7 @@
 const bcrypt = require('bcrypt');
 const User = require('../models/User');
 const nodemailer = require('nodemailer');
+const mongoose = require('mongoose');
 
 class AuthController {
     login(req, res, next) {
@@ -13,8 +14,11 @@ class AuthController {
             .then(user => {
                 if (!user) {
                     console.log('User not found');
+
+                    
                     return res.status(401).json({ message: 'Unauthorized' });
                 }
+
 
                 console.log('User found:', user.email);
 
@@ -99,50 +103,59 @@ class AuthController {
                 res.status(500).send('Error logging out');
             });
     }
-    resetPassword(req, res, next){
-        
+    resetPassword(req, res, next) {
         const { email } = req.body;
-
-    if (!email) {
-        return res.status(400).send('Email is required');
-    }
-
-
-        console.log('HÀM RESET PASSWORD ĐÃ ĐƯỢC GỌI THÀNH CÔNG:', email); // Debugging log
-  
-
-        const transporter = nodemailer.createTransport({
-            
-            host: 'smtp.mailtrap.io',
-            port: 2525,
-            auth: {
-                user: 'da80d568f1abdb', // Thay bằng username của bạn trên Mailtrap
-                pass: 'ae3d38c7f3b30b'  // Thay bằng password của bạn trên Mailtrap
-            }
-        });
-
-        // Thiết lập email
-        const mailOptions = {
-            from: 'clothesshop@gmail.com', // Địa chỉ email gửi
-            to: req.body.email,     // Địa chỉ email nhận
-            subject: 'Password Reset',     // Tiêu đề email
-            text: `Bạn nhận được thông báo này vì bạn (hoặc người khác) đã yêu cầu đặt lại mật khẩu cho tài khoản của mình.\n\n
-            Vui lòng nhấp vào liên kết sau hoặc dán liên kết này vào trình duyệt của bạn để hoàn tất quá trình:\n\n
-                   http://localhost:3000/newpassword/token\n\n
-                   Nếu bạn không thực hiện điều này cứ mặc kệ nó.\n`
-        };
-
-        // Gửi email
-        transporter.sendMail(mailOptions)
-        .then(info => {
-            console.log('Email đã được gửi đi:', info.response);
-            res.send('Email đã được gửi đi: ' + info.response);
-        })
-        .catch(error => {
-            console.error('Error sending email:', error);
-            res.status(500).send(error.toString());
-        });
     
+        if (!email) {
+            return res.status(400).send('Email is required');
+        }
+    
+        // Kiểm tra xem email tồn tại trong cơ sở dữ liệu
+        User.findOne({ email: email })
+            .then(user => {
+                if (!user) {
+                    return res.status(404).send('Email not found');
+                   
+                }
+
+                console.log("HÀM ĐÃ ĐƯỢC GỌI THÀNH CÔNG", email)
+                const userId = user._id
+                console.log(userId)
+                
+                // Nếu email tồn tại, gửi email reset mật khẩu
+                const transporter = nodemailer.createTransport({
+                    host: 'smtp.mailtrap.io',
+                    port: 2525,
+                    auth: {
+                        user: 'da80d568f1abdb',
+                        pass: 'ae3d38c7f3b30b'
+                    }
+                });
+    
+                const mailOptions = {
+                    from: 'clothesshop@gmail.com',
+                    to: email,
+                    subject: 'Password Reset',
+                    text: `Bạn nhận được thông báo này vì bạn (hoặc người khác) đã yêu cầu đặt lại mật khẩu cho tài khoản của mình.\n\n
+                    Vui lòng nhấp vào liên kết sau hoặc dán liên kết này vào trình duyệt của bạn để hoàn tất quá trình:\n\n
+                           http://localhost:3000/newpassword/${userId}\n\n
+                           Nếu bạn không thực hiện điều này cứ mặc kệ nó.\n`
+                };
+    
+                transporter.sendMail(mailOptions)
+                    .then(info => {
+                        console.log('Email đã được gửi đi:', info.response);
+                        res.send('Email đã được gửi đi: ' + info.response);
+                    })
+                    .catch(error => {
+                        console.error('Error sending email:', error);
+                        res.status(500).send(error.toString());
+                    });
+            })
+            .catch(err => {
+                console.error('Error finding user:', err);
+                res.status(500).send(err.toString());
+            });
     }
 }
 
