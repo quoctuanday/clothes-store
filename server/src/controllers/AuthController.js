@@ -15,10 +15,8 @@ class AuthController {
                 if (!user) {
                     console.log('User not found');
 
-                    
                     return res.status(401).json({ message: 'Unauthorized' });
                 }
-
 
                 console.log('User found:', user.email);
 
@@ -111,33 +109,32 @@ class AuthController {
     }
     resetPassword(req, res, next) {
         const { email } = req.body;
-    
+
         if (!email) {
             return res.status(400).send('Email is required');
         }
-    
+
         // Kiểm tra xem email tồn tại trong cơ sở dữ liệu
         User.findOne({ email: email })
             .then(user => {
                 if (!user) {
                     return res.status(404).send('Email not found');
-                   
                 }
 
-                console.log("HÀM ĐÃ ĐƯỢC GỌI THÀNH CÔNG", email)
-                const userId = user._id
-                console.log(userId)
-                
+                console.log('HÀM ĐÃ ĐƯỢC GỌI THÀNH CÔNG', email);
+                const userId = user._id;
+                console.log(userId);
+
                 // Nếu email tồn tại, gửi email reset mật khẩu
                 const transporter = nodemailer.createTransport({
                     host: 'smtp.mailtrap.io',
                     port: 2525,
                     auth: {
                         user: 'da80d568f1abdb',
-                        pass: 'ae3d38c7f3b30b'
-                    }
+                        pass: 'ae3d38c7f3b30b',
+                    },
                 });
-    
+
                 const mailOptions = {
                     from: 'clothesshop@gmail.com',
                     to: email,
@@ -145,10 +142,11 @@ class AuthController {
                     text: `Bạn nhận được thông báo này vì bạn (hoặc người khác) đã yêu cầu đặt lại mật khẩu cho tài khoản của mình.\n\n
                     Vui lòng nhấp vào liên kết sau hoặc dán liên kết này vào trình duyệt của bạn để hoàn tất quá trình:\n\n
                            http://localhost:3000/newpassword/${userId}\n\n
-                           Nếu bạn không thực hiện điều này cứ mặc kệ nó.\n`
+                           Nếu bạn không thực hiện điều này cứ mặc kệ nó.\n`,
                 };
-    
-                transporter.sendMail(mailOptions)
+
+                transporter
+                    .sendMail(mailOptions)
                     .then(info => {
                         console.log('Email đã được gửi đi:', info.response);
                         res.send('Email đã được gửi đi: ' + info.response);
@@ -181,12 +179,31 @@ class AuthController {
             });
     }
 
+    newpass(req, res, next) {
+        const password = req.body.password;
 
-
+        bcrypt
+            .hash(password, 10)
+            .then(hashedPassword => {
+                return User.updateOne(
+                    { _id: req.params.id },
+                    { password: hashedPassword }
+                );
+            })
+            .then(result => {
+                if (result.nModified === 0) {
+                    return res.status(404).json({
+                        message: 'User not found or no changes made.',
+                    });
+                }
+                res.status(200).json({
+                    message: 'Profile updated successfully.',
+                });
+            })
+            .catch(error => {
+                next(error);
+            });
+    }
 }
-
-
-
-        
 
 module.exports = new AuthController();

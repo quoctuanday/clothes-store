@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 
-function ResetPasswordPage() {
+function ResetPasswordPage({ params }: { params: { id: string } }) {
     const [newPassword, setNewPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
 
@@ -16,16 +16,18 @@ function ResetPasswordPage() {
         }
 
         try {
-            // Gửi yêu cầu POST tới endpoint /reset-password
-            const response = await fetch('http://localhost:8000/auth/reset-password', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    newPassword,
-                }),
-            });
+            const response = await fetch(
+                `http://localhost:8000/auth/newpass/${params.id}`,
+                {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        password: newPassword,
+                    }),
+                }
+            );
 
             if (response.ok) {
                 alert('Đặt lại mật khẩu thành công');
