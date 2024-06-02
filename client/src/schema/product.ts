@@ -10,11 +10,11 @@ export type Products = {
     gender: string;
     size: string;
     quantityInStock: number;
-    quantitySold: number;
-    type: string;
-    deleted: boolean;
-    createdAt: string;
-    updatedAt: string;
-    __v: number;
-    status: string;
+    quantitySold?: number;
+    type?: string;
+    deleted?: boolean;
+    createdAt?: string;
+    updatedAt?: string;
+    __v?: number;
+    status?: string;
 };

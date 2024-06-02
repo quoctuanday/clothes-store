@@ -40,7 +40,7 @@ class AdminController {
                 ]) => {
                     const soldCount =
                         soldResult.length > 0 ? soldResult[0].totalSold : 0;
-                    res.render('admin/home', {
+                    res.json({
                         productCount,
                         soldCount,
                         bannerCount,
@@ -51,19 +51,6 @@ class AdminController {
             )
             .catch(error => {
                 console.error('Lỗi khi đếm số lượng sản phẩm:', error);
-                next(error);
-            });
-    }
-
-    showCustomers(req, res, next) {
-        User.find({})
-            .then(users => {
-                res.render('admin/customers', {
-                    users: multipleMongooseToObject(users),
-                });
-            })
-            .catch(error => {
-                console.error('Lỗi khi đưa ra danh sách khách hàng:', error);
                 next(error);
             });
     }
@@ -82,32 +69,6 @@ class AdminController {
             });
     }
 
-    showProducts(req, res, next) {
-        Product.find({ quantityInStock: { $gt: 0 } })
-            .then(products => {
-                res.render('admin/products', {
-                    products: multipleMongooseToObject(products),
-                });
-            })
-            .catch(error => {
-                console.error('Lỗi khi đưa ra danh sách sản phẩm:', error);
-                next(error);
-            });
-    }
-
-    showBanners(req, res, next) {
-        Banner.find({})
-            .then(banners => {
-                res.render('admin/banners', {
-                    banners: multipleMongooseToObject(banners),
-                });
-            })
-            .catch(error => {
-                console.error('Lỗi khi đưa ra danh sách banner:', error);
-                next(error);
-            });
-    }
-
     showNews(req, res, next) {
         Promise.all([
             MainNews.find({}), // Fetch all main news
@@ -122,33 +83,6 @@ class AdminController {
             .catch(error => {
                 console.error('Lỗi khi đưa ra danh sách tin tức:', error);
                 next(error);
-            });
-    }
-
-    deleteCustomers(req, res, next) {
-        User.deleteOne({ _id: req.params.id })
-            .then(() => res.redirect('back'))
-            .catch(err => {
-                console.error('Lỗi khi xóa người dùng: ', err);
-                next(err);
-            });
-    }
-
-    deleteBanners(req, res, next) {
-        Banner.deleteOne({ _id: req.params.id })
-            .then(() => res.redirect('back'))
-            .catch(err => {
-                console.error('Lỗi khi xóa banner: ', err);
-                next(err);
-            });
-    }
-
-    deleteProducts(req, res, next) {
-        Product.deleteOne({ _id: req.params.id })
-            .then(() => res.redirect('back'))
-            .catch(err => {
-                console.error('Lỗi khi xóa sản phẩm: ', err);
-                next(err);
             });
     }
 
@@ -223,34 +157,12 @@ class AdminController {
             });
     }
 
-    createProduct(req, res, next) {
-        res.render('admin/create-product');
-    }
-
-    createBanner(req, res, next) {
-        res.render('admin/create-banner');
-    }
-
     createMainNews(req, res, next) {
         res.render('admin/create-main-news');
     }
 
     createSecondaryNews(req, res, next) {
         res.render('admin/create-secondary-news');
-    }
-
-    storeProduct(req, res, next) {
-        const formData = req.body;
-        formData.status = 'Chưa bán';
-        formData.quantitySold = 0;
-        const product = new Product(formData);
-        product
-            .save()
-            .then(() => res.redirect('/admin/products'))
-            .catch(err => {
-                console.error('Lỗi khi tạo sản phẩm: ', err);
-                next(err);
-            });
     }
 
     createOrder(req, res, next) {
@@ -305,18 +217,6 @@ class AdminController {
             });
     }
 
-    storeBanner(req, res, next) {
-        const formData = req.body;
-        const banner = new Banner(formData);
-        banner
-            .save()
-            .then(() => res.redirect('/admin/banners'))
-            .catch(err => {
-                console.error('Lỗi khi tạo sản phẩm: ', err);
-                next(err);
-            });
-    }
-
     storeMainNews(req, res, next) {
         const news = new MainNews(req.body);
         news.save()
@@ -331,37 +231,11 @@ class AdminController {
             .catch(next);
     }
 
-    editProduct(req, res, next) {
-        Product.findById(req.params.id).then(product =>
-            res.render('admin/edit-product', {
-                product: mongooseToObject(product),
-            })
-        );
-    }
-
     updateOrder(req, res, next) {
         Order.updateOne({ _id: req.params.id }, req.body)
             .then(() => res.redirect('back'))
             .catch(err => {
                 console.error('Lỗi khi update order: ', err);
-                next(err);
-            });
-    }
-
-    updateProduct(req, res, next) {
-        Product.updateOne({ _id: req.params.id }, req.body)
-            .then(() => res.redirect('/admin/products'))
-            .catch(err => {
-                console.error('Lỗi khi update product: ', err);
-                next(err);
-            });
-    }
-
-    updateBanner(req, res, next) {
-        Banner.updateOne({ _id: req.params.id }, req.body)
-            .then(() => res.redirect('/admin/banners'))
-            .catch(err => {
-                console.error('Lỗi khi update banner: ', err);
                 next(err);
             });
     }
@@ -376,14 +250,6 @@ class AdminController {
         SecondaryNews.updateOne({ _id: req.params.id }, req.body)
             .then(() => res.redirect('/admin/news'))
             .catch(next);
-    }
-
-    editBanner(req, res, next) {
-        Banner.findById(req.params.id).then(banner =>
-            res.render('admin/edit-banner', {
-                banner: mongooseToObject(banner),
-            })
-        );
     }
 
     editMainNews(req, res, next) {

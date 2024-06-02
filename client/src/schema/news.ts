@@ -4,11 +4,11 @@ export type News = {
     title: string;
     image: string;
     content: string;
-    deleted: boolean;
+    deleted?: boolean;
     createdAt: string;
-    updatedAt: string;
-    __v: number;
-    status: string;
+    updatedAt?: string;
+    __v?: number;
+    status?: string;
 };
 
 export interface NewsResponse {

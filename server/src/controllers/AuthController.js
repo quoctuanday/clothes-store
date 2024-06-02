@@ -24,6 +24,12 @@ class AuthController {
                             .status(401)
                             .json({ message: 'Unauthorized' });
                     }
+                    if (user.block) {
+                        console.log('User account has been locked');
+                        return res
+                            .status(403)
+                            .json({ message: 'User account has been locked' });
+                    }
 
                     req.session.userId = user._id;
                     console.log(req.session.userId);

@@ -9,4 +9,5 @@ export type Users = {
     gender: string;
     address: string;
     role: string;
+    block: boolean;
 };

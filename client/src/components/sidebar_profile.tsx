@@ -8,6 +8,7 @@ import { IoIosLogOut } from 'react-icons/io';
 import { FiShoppingCart } from 'react-icons/fi';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { MdDashboard } from 'react-icons/md';
 
 function SidebarProfile() {
     const router = useRouter();
@@ -27,6 +28,7 @@ function SidebarProfile() {
                 const data = await response.json();
                 setLogoutMessage(data.message);
                 clearUserData(); // Clear user data
+                localStorage.clear();
             } else {
                 throw new Error('Đăng xuất thất bại');
             }
@@ -85,17 +87,30 @@ function SidebarProfile() {
                                 Đơn mua
                             </Link>
                         </li>
+                        {user.role === 'Admin' && (
+                            <li className="flex items-center category-item">
+                                <div>
+                                    <MdDashboard />
+                                </div>
+                                <Link
+                                    href={'/admin/home'}
+                                    className="p-3 block roboto-regular text-xl"
+                                >
+                                    Manage dashboard
+                                </Link>
+                            </li>
+                        )}
                         <li className="flex items-center category-item">
                             <div>
                                 <IoIosLogOut />
                             </div>
-                            <a href = "/login">
-                            <button
-                                onClick={handleLogout}
-                                className="p-3 block roboto-regular text-xl"
-                            >
-                                Đăng xuất
-                            </button>
+                            <a href="/login">
+                                <button
+                                    onClick={handleLogout}
+                                    className="p-3 block roboto-regular text-xl"
+                                >
+                                    Đăng xuất
+                                </button>
                             </a>
                         </li>
                     </ul>

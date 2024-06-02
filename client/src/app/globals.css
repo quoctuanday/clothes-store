@@ -26,6 +26,10 @@
         transform: translateX(5px);
         transition: transform 0.3s ease;
     }
+
+    .box-shadow {
+        box-shadow: 0px 2px 5px #ccc;
+    }
 }
 
 @layer utilities {

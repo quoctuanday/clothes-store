@@ -22,17 +22,14 @@ function CartPage() {
 
                 const data = await response.json();
                 setCartItems(data.cartItem || []);
+                const totalItems = cartItems.length;
+                localStorage.setItem('cartItemCount', totalItems.toString());
             } catch (error) {
                 console.log(error);
                 setError('Không thể tải mục giỏ hàng.');
             }
         };
         fetchData();
-    }, []);
-
-    useEffect(() => {
-        const totalItems = cartItems.length;
-        localStorage.setItem('cartItemCount', totalItems.toString());
     }, [cartItems]);
 
     const handleRemoveFromCart = async (itemId: string) => {

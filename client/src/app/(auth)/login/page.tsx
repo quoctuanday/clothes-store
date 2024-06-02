@@ -7,6 +7,9 @@ import { useRouter } from 'next/navigation';
 function LoginPage() {
     const router = useRouter();
     const [error, setError] = useState('');
+    const [loginSuccess, setLoginSuccess] = useState(false);
+    const [loginError, setLoginError] = useState('');
+    const [accountLocked, setAccountLocked] = useState('');
     const [user, setUser] = useState<Users | null>(null); // Thay đổi kiểu dữ liệu thành `Users | null`
     const [fields, setFields] = useState({
         email: '',
@@ -32,37 +35,37 @@ function LoginPage() {
         })
             .then((res) => {
                 if (res.ok) return res.json();
-                throw Error(res.statusText);
+                if (res.status === 403) {
+                    throw new Error('Tài khoản người dùng đã bị khóa');
+                }
+                throw new Error('Đăng nhập thất bại');
             })
             .then((user) => {
                 setUser(user);
-                // localStorage.setItem('isLogin', true);
+                setLoginSuccess(true);
+                setTimeout(() => {
+                    router.push('/home');
+                }, 3000);
             })
             .catch((error) => {
-                console.log(error);
+                if (error.message === 'Tài khoản người dùng đã bị khóa') {
+                    setAccountLocked(error.message);
+                } else {
+                    setLoginError(error.message);
+                }
             });
     };
 
-    // useEffect(() => {
-    //     fetch('http://localhost:8000/auth/login/me', {
-    //         credentials: 'include',
-    //     }).then((res) =>
-    //         res.json().then((me) => {
-    //             setUser(me);
-    //         })
-    //     );
-    // }, []);
-
     useEffect(() => {
-        if (user) {
-            router.push('/home');
+        if (loginSuccess || loginError || accountLocked) {
+            const timer = setTimeout(() => {
+                setLoginSuccess(false);
+                setLoginError('');
+                setAccountLocked('');
+            }, 5000);
+            return () => clearTimeout(timer);
         }
-    }, [user, router]);
-    const handleLogout = () => {
-        document.cookie =
-            'sessionId=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
-        setUser(null);
-    };
+    }, [loginSuccess, loginError, accountLocked]);
 
     return (
         <div className="">
@@ -114,6 +117,21 @@ function LoginPage() {
                                 <span className="underline ml-1">Đăng ký</span>
                             </Link>
                         </div>
+                        {loginSuccess && (
+                            <div className="mt-4 p-2 bg-green-200 text-green-800 border border-green-400 rounded">
+                                Đăng nhập thành công
+                            </div>
+                        )}
+                        {loginError && (
+                            <div className="mt-4 p-2 bg-red-200 text-red-800 border border-red-400 rounded">
+                                {loginError}
+                            </div>
+                        )}
+                        {accountLocked && (
+                            <div className="mt-4 p-2 bg-yellow-200 text-yellow-800 border border-yellow-400 rounded">
+                                {accountLocked}
+                            </div>
+                        )}
                     </div>
                 </div>
             </form>

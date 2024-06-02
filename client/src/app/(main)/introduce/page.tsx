@@ -134,33 +134,28 @@ const Introduce = () => {
                             name: 'Nguyễn Quốc Tuấn',
                             facebook:
                                 'https://www.facebook.com/profile.php?id=100014294951293',
-                            facebookAvatar:
-                                'https://scontent.fhan5-6.fna.fbcdn.net/v/t39.30808-1/438302239_1805358169950664_3144416503454254636_n.jpg?stp=c0.99.200.200a_dst-jpg_p200x200&_nc_cat=105&ccb=1-7&_nc_sid=5f2048&_nc_ohc=34cuBYz0t6gQ7kNvgElpWCe&_nc_ht=scontent.fhan5-6.fna&oh=00_AYBMxMMYOmw3RdP0KdyxGrcaohbB-KGB3VftnSmAzEx0Bg&oe=664F9F4A',
+                            facebookAvatar: '/images/avt_Tuan.webp',
                         },
                         {
                             name: 'Ngô Quang Anh',
                             facebook: 'https://www.facebook.com/qanh5102',
-                            facebookAvatar:
-                                'https://scontent.fhan5-11.fna.fbcdn.net/v/t39.30808-1/436118413_1147924739676590_1227838794397871582_n.jpg?stp=cp6_dst-jpg_s200x200&_nc_cat=100&ccb=1-7&_nc_sid=5f2048&_nc_ohc=ZIDfLVqhRm8Q7kNvgHTuRCV&_nc_ht=scontent.fhan5-11.fna&oh=00_AYC7XSoyAd0l2KivAbiSmzlTUAGvnb6zysjke5tDgT1Wag&oe=664FB979',
+                            facebookAvatar: '/images/avt_QA.jpg',
                         },
                         {
                             name: 'Lý Nhật Long',
                             facebook: 'https://www.facebook.com/lynhatlog',
-                            facebookAvatar:
-                                'https://scontent.fhan5-11.fna.fbcdn.net/v/t39.30808-1/395263500_1630082287501268_7402731834210135032_n.jpg?stp=c25.26.168.168a_dst-jpg_p200x200&_nc_cat=103&ccb=1-7&_nc_sid=5f2048&_nc_ohc=eXzarOpHzScQ7kNvgF7S8Tm&_nc_ht=scontent.fhan5-11.fna&oh=00_AYBPnO9Sm8j9xQFyZkxDkXcMuWosmCh9HwZmzq6JQk50yg&oe=664FC270',
+                            facebookAvatar: '/images/avt_long.webp',
                         },
                         {
                             name: 'Nguyễn Minh Tiến',
                             facebook:
                                 'https://www.facebook.com/profile.php?id=100020561310168',
-                            facebookAvatar:
-                                'https://scontent.fhan5-11.fna.fbcdn.net/v/t39.30808-1/427572654_1340003153361716_4819455078748796395_n.jpg?stp=dst-jpg_p200x200&_nc_cat=100&ccb=1-7&_nc_sid=5f2048&_nc_ohc=0dYW0B-pfwAQ7kNvgFO_SmN&_nc_oc=AdjJqSHU5ySHbousdnD1L_SB8sUVZpn_2aauYO3MNEEXfmeq3_YGiIdC0u7pfq6Pzao&_nc_ht=scontent.fhan5-11.fna&oh=00_AYCIE2IbBHU3_Ws-Dd1ChaNK7gcD-y9Cn2y-q7AFBcnq-g&oe=664FC8F3',
+                            facebookAvatar: '/images/avt_Tien.jpg',
                         },
                         {
                             name: 'Nguyễn Tiến Đạt',
                             facebook: 'https://www.facebook.com/datchen28',
-                            facebookAvatar:
-                                'https://scontent.fhan5-6.fna.fbcdn.net/v/t39.30808-1/245465901_614112776441886_109765014928679402_n.jpg?stp=dst-jpg_p200x200&_nc_cat=107&ccb=1-7&_nc_sid=5f2048&_nc_ohc=r67JQTUL0aoQ7kNvgHf2_ln&_nc_ht=scontent.fhan5-6.fna&oh=00_AYDjPGO5RNB_lYC3-0gM26HlrC8ypkO8k0ejebZ6bfW19Q&oe=664FC63C',
+                            facebookAvatar: 'images/avt_dat.webp',
                         },
                     ].map((member, index) => (
                         <motion.div
@@ -174,9 +169,9 @@ const Introduce = () => {
                             <img
                                 src={member.facebookAvatar}
                                 alt={`Thành viên đội ngũ ${index + 1}`}
-                                width={300}
-                                height={300}
-                                className="rounded-full mx-auto shadow-2xl transition-transform transform hover:scale-105"
+                                width={162}
+                                height={162}
+                                className="rounded-full mx-auto shadow-2xl transition-transform transform hover:scale-105 bg-center bg-cover"
                             />
                             <h3 className="text-2xl font-semibold text-gray-900 mt-6">
                                 <a

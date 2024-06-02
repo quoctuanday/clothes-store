@@ -17,6 +17,7 @@ function EditProfilePage() {
         gender: '',
         address: '',
         role: '',
+        block: false,
     });
 
     useEffect(() => {

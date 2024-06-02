@@ -4,5 +4,6 @@ const userController = require('../controllers/UserController');
 
 router.post('/addcart', userController.addCart);
 router.put('/updateProfile/:id', userController.updateProfile);
+router.get('/', userController.showUser);
 
 module.exports = router;

@@ -76,6 +76,18 @@ class UserController {
                 });
             });
     };
+    showUser(req, res, next) {
+        User.find({})
+            .then(users => {
+                res.json({
+                    users: multipleMongooseToObject(users),
+                });
+            })
+            .catch(error => {
+                console.error('Lỗi khi đưa ra danh sách người dùng:', error);
+                next(error);
+            });
+    }
 }
 
 module.exports = new UserController();

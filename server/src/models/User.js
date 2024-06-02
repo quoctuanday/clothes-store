@@ -13,6 +13,9 @@ const User = new Schema(
         phone: { type: String, maxLength: 255 },
         email: { type: String, maxLength: 600 },
         address: { type: String, maxLength: 255 },
+        block: {
+            type: Boolean,
+        },
         role: {
             type: String,
             enum: ['Customer', 'Admin'],
