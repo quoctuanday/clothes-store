@@ -57,10 +57,35 @@ class AdminController {
 
     showOrders(req, res, next) {
         Order.find({ userId: req.params.id })
-            .populate('productId') // Lấy thông tin sản phẩm cho mỗi đơn hàng
+
             .then(orders => {
-                res.render('admin/orders', {
-                    orders: multipleMongooseToObject(orders),
+                const populatedOrders = orders.map(order => {
+                    return OrderDetail.find({ orderId: order._id })
+                        .populate('productId')
+                        .then(orderDetails => {
+                            const populatedOrder = {
+                                _id: order._id,
+                                userId: order.userId,
+                                status: order.status,
+                                totalAmount: order.totalAmount,
+                                paymentStatus: order.paymentStatus,
+                                createdAt: order.createdAt,
+                                updatedAt: order.updatedAt,
+                                products: orderDetails.map(detail => ({
+                                    productId: detail.productId,
+                                    quantity: detail.quantity,
+                                    unitPrice: detail.unitPrice,
+                                    discount: detail.discount,
+                                })),
+                            };
+                            return populatedOrder;
+                        });
+                });
+
+                Promise.all(populatedOrders).then(populatedOrders => {
+                    res.json({
+                        orders: populatedOrders,
+                    });
                 });
             })
             .catch(err => {
@@ -70,10 +95,7 @@ class AdminController {
     }
 
     showNews(req, res, next) {
-        Promise.all([
-            MainNews.find({}), // Fetch all main news
-            SecondaryNews.find({}), // Fetch all secondary news
-        ])
+        Promise.all([MainNews.find({}), SecondaryNews.find({})])
             .then(([mainNews, secondaryNews]) => {
                 res.render('admin/news', {
                     mainNews: multipleMongooseToObject(mainNews),
@@ -111,7 +133,7 @@ class AdminController {
 
     handleFormActions(req, res, next) {
         const orderId = req.body.orderId;
-        const newStatus = req.body.action;
+        const newStatus = req.body.status;
 
         Order.findByIdAndUpdate(orderId, { status: newStatus }, { new: true })
             .then(updatedOrder => {
@@ -134,7 +156,6 @@ class AdminController {
                         product => {
                             // Kiểm tra nếu tìm thấy sản phẩm
                             if (product) {
-                                // Cập nhật trạng thái của sản phẩm thành "đã bán"
                                 product.quantitySold += quantity;
                                 product.quantityInStock -= quantity;
                                 // Lưu lại thay đổi trạng thái của sản phẩm
@@ -145,7 +166,7 @@ class AdminController {
                         }
                     );
                 } else {
-                    return Promise.resolve(null); // Không cần cập nhật sản phẩm
+                    return Promise.resolve(null);
                 }
             })
             .then(() => {

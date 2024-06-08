@@ -96,7 +96,7 @@ function SidebarProfile() {
                                     href={'/admin/home'}
                                     className="p-3 block roboto-regular text-xl"
                                 >
-                                    Manage dashboard
+                                    Admin dashboard
                                 </Link>
                             </li>
                         )}

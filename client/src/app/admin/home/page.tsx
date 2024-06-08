@@ -40,7 +40,7 @@ function AdminPage() {
                     <div className="flex items-center justify-around w-full max-w-3xl h-32  box-shadow rounded p-9 mx-auto mb-5">
                         <div className="text-center">
                             <div className="roboto-regular text-xl">
-                                Số lượng sản phẩm
+                                Sản phẩm
                             </div>
                             <div className="roboto-regular text-xl">
                                 {data.productCount}

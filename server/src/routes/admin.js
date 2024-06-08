@@ -17,7 +17,7 @@ router.put(
 );
 router.delete('/news/:type/:id', adminController.deleteNews);
 
-router.put('/orders/handle-form-actions', adminController.handleFormActions);
+router.put('/orders/status/:id', adminController.handleFormActions);
 
 router.put('/orders/:id', adminController.updateOrder);
 

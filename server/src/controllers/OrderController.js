@@ -30,5 +30,51 @@ class OrderController {
                 next(err);
             });
     }
+    updateOrder(req, res, next) {
+        const orderId = req.body.orderId;
+        const newStatus = req.body.status;
+
+        Order.findByIdAndUpdate(orderId, { status: newStatus }, { new: true })
+            .then(updatedOrder => {
+                // Kiểm tra nếu trạng thái mới của đơn hàng là "đã giao"
+                if (newStatus === 'Đã giao') {
+                    // Tìm chi tiết đơn hàng liên quan đến orderId
+                    return OrderDetail.findOne({ orderId: orderId });
+                } else {
+                    return Promise.resolve(null); // Không cần cập nhật sản phẩm
+                }
+            })
+            .then(orderDetail => {
+                // Kiểm tra nếu tìm thấy chi tiết đơn hàng và trạng thái mới của đơn hàng là "đã giao"
+                if (orderDetail && newStatus === 'Đã giao') {
+                    // Lấy quantity từ orderDetail
+                    const quantity = orderDetail.quantity;
+
+                    // Tìm sản phẩm liên quan đến đơn hàng
+                    return Product.findOne({ _id: orderDetail.productId }).then(
+                        product => {
+                            // Kiểm tra nếu tìm thấy sản phẩm
+                            if (product) {
+                                product.quantitySold += quantity;
+                                product.quantityInStock -= quantity;
+                                // Lưu lại thay đổi trạng thái của sản phẩm
+                                return product.save();
+                            } else {
+                                return Promise.resolve(null); // Không cần cập nhật sản phẩm
+                            }
+                        }
+                    );
+                } else {
+                    return Promise.resolve(null);
+                }
+            })
+            .then(() => {
+                res.redirect('back');
+            })
+            .catch(err => {
+                console.error('Lỗi khi cập nhật đơn hàng: ', err);
+                next(err);
+            });
+    }
 }
 module.exports = new OrderController();

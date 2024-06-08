@@ -1,11 +1,8 @@
 'use client';
 import UserData from '@/api/User';
-import { TrashIcon } from '@radix-ui/react-icons';
 import React, { useState } from 'react';
-import { BiLock, BiTrash } from 'react-icons/bi';
-import { Users } from '@/schema/user';
-import { BsUnlock } from 'react-icons/bs';
 import { CiLock, CiUnlock } from 'react-icons/ci';
+import Link from 'next/link';
 
 function AdminCustomerPage() {
     const user = UserData();
@@ -80,7 +77,7 @@ function AdminCustomerPage() {
                     </div>
                     <div className="col-span-2 flex items-center">
                         <button className="rounded py-[6px] px-[12px] hover:bg-[#0dcaf0] hover:text-[black] border-[1px] border-[#0dcaf0] text-[#0dcaf0] mr-2">
-                            Xem
+                            <Link href={`customer/${user._id}`}>Xem</Link>
                         </button>
                         <button
                             className="rounded px-[12px] py-[10px] hover:bg-[#dc3545] hover:text-[white] border-[1px] border-[#dc3545] text-[#dc3545]"
