@@ -31,8 +31,9 @@ class OrderController {
             });
     }
     updateOrder(req, res, next) {
-        const orderId = req.body.orderId;
+        const orderId = req.params.id;
         const newStatus = req.body.status;
+        console.log(orderId);
 
         Order.findByIdAndUpdate(orderId, { status: newStatus }, { new: true })
             .then(updatedOrder => {
@@ -69,7 +70,7 @@ class OrderController {
                 }
             })
             .then(() => {
-                res.redirect('back');
+                res.send('succes');
             })
             .catch(err => {
                 console.error('Lỗi khi cập nhật đơn hàng: ', err);

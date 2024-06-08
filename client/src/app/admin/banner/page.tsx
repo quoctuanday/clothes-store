@@ -75,7 +75,7 @@ function AdminBannerPage() {
                     <div className="" key={banner._id}>
                         <div className="grid grid-cols-8 px-5 py-2 roboto-regular gap-3">
                             <div className="col-span-1 flex justify-center items-center">
-                                {index + 1}
+                                {(currentPage - 1) * pageSize + index + 1}
                             </div>
                             <div className="col-span-3 flex  items-center  line-clamp-2">
                                 {banner.title}

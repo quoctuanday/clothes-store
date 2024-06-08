@@ -90,7 +90,7 @@ function AdminProductPage() {
                     <div className="" key={product._id}>
                         <div className="grid grid-cols-12 px-5 py-2 roboto-regular gap-3">
                             <div className="col-span-1 flex justify-center items-center">
-                                {index + 1}
+                                {(currentPage - 1) * pageSize + index + 1}
                             </div>
                             <div className="col-span-2 flex  items-center  line-clamp-2">
                                 {product._id}

@@ -1,11 +1,11 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { order } from '@/schema/order';
+import { Orders } from '@/schema/orders';
 import Image from 'next/image';
 import Link from 'next/link';
 
 function OrderPage() {
-    const [orders, setOrders] = useState<order[]>([]);
+    const [orders, setOrders] = useState<Orders[]>([]);
     const [error, setError] = useState<string | null>(null);
     const [orderToCancel, setOrderToCancel] = useState<string | null>(null);
 
@@ -21,7 +21,7 @@ function OrderPage() {
 
                 const data = await response.json();
                 const pendingOrders = data.orders.filter(
-                    (order: order) => order.status === 'Chờ xử lí'
+                    (order: Orders) => order.status === 'Chờ xử lí'
                 );
                 setOrders(pendingOrders || []);
             } catch (error) {
@@ -104,7 +104,7 @@ function OrderPage() {
     };
 
     return (
-        <div className="p-6 bg-white shadow rounded-md max-w-4xl mx-auto">
+        <div className="p-6   ">
             <div className="max-h-[666px] overflow-y-scroll">
                 {orders.length === 0 ? (
                     <div className="text-center mt-5">
