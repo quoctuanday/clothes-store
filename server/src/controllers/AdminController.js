@@ -55,45 +55,6 @@ class AdminController {
             });
     }
 
-    showOrders(req, res, next) {
-        Order.find({ userId: req.params.id })
-
-            .then(orders => {
-                const populatedOrders = orders.map(order => {
-                    return OrderDetail.find({ orderId: order._id })
-                        .populate('productId')
-                        .then(orderDetails => {
-                            const populatedOrder = {
-                                _id: order._id,
-                                userId: order.userId,
-                                status: order.status,
-                                totalAmount: order.totalAmount,
-                                paymentStatus: order.paymentStatus,
-                                createdAt: order.createdAt,
-                                updatedAt: order.updatedAt,
-                                products: orderDetails.map(detail => ({
-                                    productId: detail.productId,
-                                    quantity: detail.quantity,
-                                    unitPrice: detail.unitPrice,
-                                    discount: detail.discount,
-                                })),
-                            };
-                            return populatedOrder;
-                        });
-                });
-
-                Promise.all(populatedOrders).then(populatedOrders => {
-                    res.json({
-                        orders: populatedOrders,
-                    });
-                });
-            })
-            .catch(err => {
-                console.error('Error fetching orders:', err);
-                next(err);
-            });
-    }
-
     showNews(req, res, next) {
         Promise.all([MainNews.find({}), SecondaryNews.find({})])
             .then(([mainNews, secondaryNews]) => {

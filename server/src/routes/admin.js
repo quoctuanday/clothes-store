@@ -22,7 +22,6 @@ router.put('/orders/status/:id', adminController.handleFormActions);
 router.put('/orders/:id', adminController.updateOrder);
 
 router.post('/orders/create', adminController.createOrder);
-router.get('/:id/orders', adminController.showOrders);
 
 router.get('/', adminController.showHome);
 

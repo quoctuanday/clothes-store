@@ -22,6 +22,98 @@ class OrderController {
                 next(err);
             });
     }
+
+    showOrdersUser(req, res, next) {
+        Order.find({ userId: req.params.id })
+
+            .then(orders => {
+                const populatedOrders = orders.map(order => {
+                    return OrderDetail.find({ orderId: order._id })
+                        .populate('productId')
+                        .then(orderDetails => {
+                            const populatedOrder = {
+                                _id: order._id,
+                                userId: order.userId,
+                                status: order.status,
+                                totalAmount: order.totalAmount,
+                                paymentStatus: order.paymentStatus,
+                                createdAt: order.createdAt,
+                                updatedAt: order.updatedAt,
+                                products: orderDetails.map(detail => ({
+                                    productId: detail.productId,
+                                    quantity: detail.quantity,
+                                    unitPrice: detail.unitPrice,
+                                    discount: detail.discount,
+                                })),
+                            };
+                            return populatedOrder;
+                        });
+                });
+
+                Promise.all(populatedOrders).then(populatedOrders => {
+                    res.json({
+                        orders: populatedOrders,
+                    });
+                });
+            })
+            .catch(err => {
+                console.error('Error fetching orders:', err);
+                next(err);
+            });
+    }
+
+    createOrder(req, res, next) {
+        const formData = req.body;
+
+        Product.findById(formData.productId)
+            .then(product => {
+                if (!product) {
+                    throw new Error('Không tìm thấy sản phẩm');
+                }
+                // Lấy giá của sản phẩm và gán cho formData.unitPrice
+                formData.unitPrice = product.price;
+                formData.discount = 0;
+
+                // Thiết lập các thuộc tính cho đơn hàng
+                formData.status = 'Chờ xử lí';
+                formData.paymentStatus = 'Chưa thanh toán';
+                formData.totalAmount =
+                    formData.quantity * formData.unitPrice -
+                    (formData.unitPrice * formData.discount) / 100;
+
+                // Tạo đối tượng Order từ formData
+                const order = new Order({
+                    userId: formData.userId,
+                    productId: formData.productId,
+                    status: formData.status,
+                    totalAmount: formData.totalAmount,
+                    paymentStatus: formData.paymentStatus,
+                });
+
+                return order.save();
+            })
+            .then(savedOrder => {
+                // Lưu orderId của order vào biến createdOrderId
+                const createdOrderId = savedOrder._id;
+
+                // Tạo đối tượng OrderDetail từ formData và orderId của order
+                const orderDetail = new OrderDetail({
+                    orderId: createdOrderId,
+                    productId: formData.productId,
+                    quantity: formData.quantity,
+                    unitPrice: formData.unitPrice,
+                    discount: formData.discount,
+                });
+
+                return orderDetail.save();
+            })
+            .then(() => res.json('Tạo order và order detail thành công'))
+            .catch(err => {
+                console.error('Lỗi khi tạo order hoặc order detail', err);
+                next(err);
+            });
+    }
+
     cancelOrder(req, res, next) {
         Order.updateOne({ _id: req.params.id }, req.body)
             .then(() => res.send('success'))

@@ -22,7 +22,7 @@ function AdminOrderPage({ params }: { params: { id: string } }) {
         const fetchData = async () => {
             try {
                 const response = await fetch(
-                    `http://localhost:8000/admin/${params.id}/orders`,
+                    `http://localhost:8000/order/${params.id}`,
                     {
                         credentials: 'include',
                     }

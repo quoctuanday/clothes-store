@@ -39,16 +39,13 @@ function BuyItemPage({ params }: { params: { id: string } }) {
         };
 
         try {
-            const response = await fetch(
-                'http://localhost:8000/admin/orders/create',
-                {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(orderData),
-                }
-            );
+            const response = await fetch('http://localhost:8000/order/create', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(orderData),
+            });
 
             if (!response.ok) {
                 throw new Error('Failed to create order');
