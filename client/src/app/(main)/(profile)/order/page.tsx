@@ -3,11 +3,15 @@ import { useEffect, useState } from 'react';
 import { Orders } from '@/schema/orders';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 function OrderPage() {
+    const router = useRouter();
     const [orders, setOrders] = useState<Orders[]>([]);
     const [error, setError] = useState<string | null>(null);
     const [orderToCancel, setOrderToCancel] = useState<string | null>(null);
+    const [shortLink, setShortLink] = useState<string | null>(null);
+    const [notification, setNotification] = useState<string | null>(null);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -31,6 +35,55 @@ function OrderPage() {
         };
         fetchData();
     }, []);
+
+    useEffect(() => {
+        const orderIdsToCheck = orders.map((order) => order._id);
+
+        const checkTransactionStatus = async (orderId: string) => {
+            try {
+                const response = await fetch(
+                    `http://localhost:8000/payment/transactions-status`,
+                    {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ orderId }),
+                    }
+                );
+
+                if (!response.ok) {
+                    throw new Error('Không thể kiểm tra trạng thái giao dịch');
+                }
+
+                const data = await response.json();
+                if (data.message === 'Payment successful and order updated.') {
+                    const updatedOrders = orders.map((order) => {
+                        if (order._id === orderId) {
+                            return { ...order, paymentStatus: 'Đã thanh toán' };
+                        }
+                        return order;
+                    });
+                    setOrders(updatedOrders);
+                } else {
+                    console.log('Payment not successful.');
+                }
+            } catch (error) {
+                console.error(error);
+                setError('Không thể kiểm tra trạng thái giao dịch.');
+            }
+        };
+
+        orderIdsToCheck.forEach((orderId) => {
+            // Kiểm tra trạng thái thanh toán chỉ khi status của order chưa phải là "Đã thanh toán"
+            if (
+                orders.find((order) => order._id === orderId)?.paymentStatus !==
+                'Đã thanh toán'
+            ) {
+                checkTransactionStatus(orderId);
+            }
+        });
+    }, [orders]);
 
     const cancelOrder = async (orderId: string) => {
         try {
@@ -61,28 +114,25 @@ function OrderPage() {
         }
     };
 
-    const paymentOrder = async (orderId: string) => {
+    const paymentOrder = async (orderId: string, totalAmount: Number) => {
         try {
-            const response = await fetch(
-                `http://localhost:8000/order/${orderId}`,
-                {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ paymentStatus: 'Đã thanh toán' }),
-                }
-            );
+            const response = await fetch(`http://localhost:8000/payment`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ orderId: orderId, amount: totalAmount }),
+            });
             if (!response.ok) {
                 throw new Error('Không thể cập nhật trạng thái thanh toán');
             }
-            const updatedOrders = orders.map((order) => {
-                if (order._id === orderId) {
-                    return { ...order, paymentStatus: 'Đã thanh toán' };
-                }
-                return order;
-            });
-            setOrders(updatedOrders);
+            const data = await response.json();
+            const shortLink = data.shortLink;
+            setShortLink(shortLink);
+            setNotification('Bạn đang được chuyển đến trang thanh toán...');
+            setTimeout(() => {
+                router.push(shortLink);
+            }, 3000);
         } catch (error) {
             console.error(error);
             setError('Không thể cập nhật trạng thái thanh toán.');
@@ -162,7 +212,12 @@ function OrderPage() {
                                                 ? 'bg-gray-400 cursor-not-allowed'
                                                 : 'bg-[#6f00ff] hover:bg-[#6f00ffdf]'
                                         }`}
-                                        onClick={() => paymentOrder(item._id)}
+                                        onClick={() =>
+                                            paymentOrder(
+                                                item._id,
+                                                item.totalAmount
+                                            )
+                                        }
                                         disabled={
                                             item.paymentStatus ===
                                             'Đã thanh toán'
@@ -188,9 +243,17 @@ function OrderPage() {
                 <div className="text-red-500 text-center mt-4">{error}</div>
             )}
 
+            {notification && (
+                <div className="fixed inset-0 rounded bg-gray-800 bg-opacity-50 flex justify-center items-center">
+                    <div className="bg-white p-5 rounded shadow-lg">
+                        <p className="text-lg font-bold mb-3">{notification}</p>
+                    </div>
+                </div>
+            )}
+
             {orderToCancel && (
-                <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center">
-                    <div className="bg-white p-5 rounded-lg shadow-lg">
+                <div className="fixed inset-0 rounded bg-gray-800 bg-opacity-50 flex justify-center items-center">
+                    <div className="bg-white p-5 rounded shadow-lg">
                         <p className="text-lg font-bold mb-3">
                             Bạn có chắc chắn muốn hủy đơn hàng này?
                         </p>

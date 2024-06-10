@@ -51,7 +51,7 @@ function AdminBannerPage() {
         <div className="px-2">
             <div className="text-center p-10 roboto-bold text-3xl">Banner</div>
             <Link href="/admin/banner/add-banner">
-                <button className="roboto-regular rounded p-2 hover:bg-[#0dcaf0] hover:text-[black] border-[1px] border-[#0dcaf0] text-[#0dcaf0]">
+                <button className="roboto-regular rounded p-2 mb-2 hover:bg-[#0dcaf0] hover:text-[black] border-[1px] border-[#0dcaf0] text-[#0dcaf0]">
                     Thêm banner{' '}
                 </button>
             </Link>

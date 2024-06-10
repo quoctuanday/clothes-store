@@ -1,6 +1,7 @@
 'use client';
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 function AddProductPage() {
     const router = useRouter();
@@ -69,33 +70,41 @@ function AddProductPage() {
             <div className="text-center p-10 roboto-bold text-3xl">
                 Thêm sản phẩm
             </div>
+            <Link href="/admin/product">
+                <button className="roboto-regular rounded px-2 hover:bg-[#0dcaf0] hover:text-[black] border-[1px] border-[#0dcaf0] text-[#0dcaf0]">
+                    Quay lại
+                </button>
+            </Link>
             <div className="grid grid-cols-4">
                 <form
                     className="px-5 col-start-1 col-span-2"
                     onSubmit={handleSubmit}
                 >
-                    <div className="mb-4 grid grid-cols-3">
-                        <label className="col-span-1 roboto-regular flex items-center justify-end">
-                            Tên sản phẩm:
-                        </label>
-                        <input
-                            className="col-span-2 ml-3 border border-gray-300 rounded p-1"
-                            type="text"
-                            id="productName"
-                            name="productName"
-                        />
+                    <div className="grid grid-cols-3 gap-1">
+                        <div className="col-span-2 mb-4 grid grid-cols-3">
+                            <label className="col-span-1 roboto-regular flex items-center justify-end">
+                                Tên sản phẩm:
+                            </label>
+                            <input
+                                className="col-span-2 ml-3 border border-gray-300 rounded p-1"
+                                type="text"
+                                id="productName"
+                                name="productName"
+                            />
+                        </div>
+                        <div className="col-span-1 mb-4 grid grid-cols-3">
+                            <label className="col-span-1 roboto-regular  flex items-center justify-end">
+                                Thương hiệu:
+                            </label>
+                            <input
+                                className="col-span-2 ml-3 border border-gray-300 rounded p-1"
+                                type="text"
+                                id="branch"
+                                name="branch"
+                            />
+                        </div>
                     </div>
-                    <div className="mb-4 grid grid-cols-3">
-                        <label className="col-span-1 roboto-regular  flex items-center justify-end">
-                            Thương hiệu:
-                        </label>
-                        <input
-                            className="col-span-2 ml-3 border border-gray-300 rounded p-1"
-                            type="text"
-                            id="branch"
-                            name="branch"
-                        />
-                    </div>
+
                     <div className="mb-4 grid grid-cols-3">
                         <label className="col-span-1 roboto-regular flex items-center justify-end">
                             Giới tính:

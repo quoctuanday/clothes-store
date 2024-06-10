@@ -22,7 +22,7 @@ function CartPage() {
 
                 const data = await response.json();
                 setCartItems(data.cartItem || []);
-                const totalItems = cartItems.length;
+                const totalItems = data.cartItem ? data.cartItem.length : 0;
                 localStorage.setItem('cartItemCount', totalItems.toString());
             } catch (error) {
                 console.log(error);
@@ -30,7 +30,7 @@ function CartPage() {
             }
         };
         fetchData();
-    }, [cartItems]);
+    }, []);
 
     const handleRemoveFromCart = async (itemId: string) => {
         setItemToRemove(itemId);

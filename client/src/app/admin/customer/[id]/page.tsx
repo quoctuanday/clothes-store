@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react';
 import { Order } from '@/schema/order';
 import ReactPaginate from 'react-paginate';
+import Link from 'next/link';
 
 function AdminOrderPage({ params }: { params: { id: string } }) {
     const [orders, setOrders] = useState<Order[]>([]);
@@ -128,6 +129,11 @@ function AdminOrderPage({ params }: { params: { id: string } }) {
     return (
         <div className="px-2">
             <div className="text-center p-8 roboto-bold text-3xl">Đơn hàng</div>
+            <Link href="/admin/customer">
+                <button className="roboto-regular rounded p-2 hover:bg-[#0dcaf0] hover:text-[black] border-[1px] border-[#0dcaf0] text-[#0dcaf0]">
+                    Quay lại
+                </button>
+            </Link>
             <div className="grid grid-cols-12 px-5 roboto-bold gap-1">
                 <div className="col-span-1 flex justify-center items-center">
                     Số TT

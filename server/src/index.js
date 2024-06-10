@@ -7,6 +7,8 @@ const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const bcrypt = require('bcrypt');
 const session = require('express-session');
+const axios = require('axios');
+const crypto = require('crypto');
 
 const route = require('./routes');
 const db = require('./config/db');

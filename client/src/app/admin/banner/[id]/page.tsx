@@ -87,6 +87,11 @@ function EditBanner({ params }: { params: { id: string } }) {
             <div className="text-center p-10 roboto-bold text-3xl">
                 Thêm banner
             </div>
+            <Link href="/admin/banner">
+                <button className="roboto-regular rounded p-2 hover:bg-[#0dcaf0] hover:text-[black] border-[1px] border-[#0dcaf0] text-[#0dcaf0]">
+                    Quay lại
+                </button>
+            </Link>
             <div className="grid grid-cols-4">
                 <form
                     className="px-5 col-start-1 col-span-2"

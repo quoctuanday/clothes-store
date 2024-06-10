@@ -5,6 +5,8 @@ import Image from 'next/image';
 import { FaCube, FaRegNewspaper, FaUserAlt } from 'react-icons/fa';
 import { HiSpeakerphone } from 'react-icons/hi';
 import { IoMdHome } from 'react-icons/io';
+import { PiKeyReturn } from 'react-icons/pi';
+import Link from 'next/link';
 
 function SidebarAdmin() {
     const user = UserLoginData();
@@ -30,7 +32,7 @@ function SidebarAdmin() {
 
                         <ul className="mt-7 list-none p-0">
                             <li className="my-2.5">
-                                <a
+                                <Link
                                     href="/admin/home"
                                     className="flex items-center roboto-regular text-white no-underline"
                                 >
@@ -38,10 +40,10 @@ function SidebarAdmin() {
                                         <IoMdHome />
                                     </div>
                                     <div>Trang chủ</div>
-                                </a>
+                                </Link>
                             </li>
                             <li className="my-2.5">
-                                <a
+                                <Link
                                     href="/admin/customer"
                                     className="flex items-center roboto-regular text-white no-underline"
                                 >
@@ -49,10 +51,10 @@ function SidebarAdmin() {
                                         <FaUserAlt />
                                     </div>
                                     <div>Khách hàng</div>
-                                </a>
+                                </Link>
                             </li>
                             <li className="my-2.5">
-                                <a
+                                <Link
                                     href="/admin/product"
                                     className="flex items-center roboto-regular text-white no-underline"
                                 >
@@ -60,10 +62,10 @@ function SidebarAdmin() {
                                         <FaCube />
                                     </div>
                                     <div>Sản phẩm</div>
-                                </a>
+                                </Link>
                             </li>
                             <li className="my-2.5">
-                                <a
+                                <Link
                                     href="/admin/banner"
                                     className="flex items-center roboto-regular text-white no-underline"
                                 >
@@ -71,10 +73,10 @@ function SidebarAdmin() {
                                         <HiSpeakerphone />
                                     </div>
                                     <div>Banners</div>
-                                </a>
+                                </Link>
                             </li>
                             <li className="my-2.5">
-                                <a
+                                <Link
                                     href="/admin/news"
                                     className="flex items-center roboto-regular text-white no-underline"
                                 >
@@ -82,7 +84,18 @@ function SidebarAdmin() {
                                         <FaRegNewspaper />
                                     </div>
                                     <div>Quản lý tin tức</div>
-                                </a>
+                                </Link>
+                            </li>
+                            <li className="my-2.5">
+                                <Link
+                                    href="/profile"
+                                    className="flex items-center roboto-regular text-white no-underline"
+                                >
+                                    <div className="text-white mr-2.5 ml-5">
+                                        <PiKeyReturn />
+                                    </div>
+                                    <div>Quay lại trang cá nhân</div>
+                                </Link>
                             </li>
                         </ul>
                     </div>
@@ -97,7 +110,7 @@ function SidebarAdmin() {
 
                         <ul className="mt-7 list-none p-0">
                             <li className="my-2.5">
-                                <a
+                                <Link
                                     href="/admin/home"
                                     className="flex items-center roboto-regular text-white no-underline"
                                 >
@@ -105,10 +118,10 @@ function SidebarAdmin() {
                                         <IoMdHome />
                                     </div>
                                     <div>Trang chủ</div>
-                                </a>
+                                </Link>
                             </li>
                             <li className="my-2.5">
-                                <a
+                                <Link
                                     href="/admin/customer"
                                     className="flex items-center roboto-regular text-white no-underline"
                                 >
@@ -116,10 +129,10 @@ function SidebarAdmin() {
                                         <FaUserAlt />
                                     </div>
                                     <div>Khách hàng</div>
-                                </a>
+                                </Link>
                             </li>
                             <li className="my-2.5">
-                                <a
+                                <Link
                                     href="/admin/product"
                                     className="flex items-center roboto-regular text-white no-underline"
                                 >
@@ -127,10 +140,10 @@ function SidebarAdmin() {
                                         <FaCube />
                                     </div>
                                     <div>Sản phẩm</div>
-                                </a>
+                                </Link>
                             </li>
                             <li className="my-2.5">
-                                <a
+                                <Link
                                     href="/admin/banner"
                                     className="flex items-center roboto-regular text-white no-underline"
                                 >
@@ -138,10 +151,10 @@ function SidebarAdmin() {
                                         <HiSpeakerphone />
                                     </div>
                                     <div>Banners</div>
-                                </a>
+                                </Link>
                             </li>
                             <li className="my-2.5">
-                                <a
+                                <Link
                                     href="/admin/news"
                                     className="flex items-center roboto-regular text-white no-underline"
                                 >
@@ -149,7 +162,7 @@ function SidebarAdmin() {
                                         <FaRegNewspaper />
                                     </div>
                                     <div>Quản lý tin tức</div>
-                                </a>
+                                </Link>
                             </li>
                         </ul>
                     </div>
