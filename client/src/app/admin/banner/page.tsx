@@ -1,16 +1,37 @@
 'use client';
-import BannerData from '@/api/Banner';
+import { Banners } from '@/schema/banner';
 import Image from 'next/image';
 import Link from 'next/link';
-import React, { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { BiPencil, BiTrash } from 'react-icons/bi';
 import ReactPaginate from 'react-paginate';
 
 function AdminBannerPage() {
-    const banner = BannerData();
+    const [banners, setBanner] = useState<Banners[]>([]);
     const [formVisible, setFormVisible] = useState(false);
     const [selectedBanner, setSelectedBanner] = useState<string | null>(null);
     const [currentPage, setCurrentPage] = useState(1);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await fetch('http://localhost:8000/banners');
+                if (!response.ok) {
+                    throw new Error('Failed to fetch banners');
+                }
+                const data = await response.json();
+                if (data && data.banners) {
+                    setBanner(data.banners);
+                } else {
+                    throw new Error('Invalid banners data received');
+                }
+            } catch (error) {
+                console.error('Error fetching banners data:', error);
+            }
+        };
+
+        fetchData();
+    }, []);
 
     const handleDeleteClick = (bannerID: string) => {
         setSelectedBanner(bannerID);
@@ -34,6 +55,10 @@ function AdminBannerPage() {
             if (!response.ok) {
                 throw new Error('Không thể xóa banner ');
             }
+            const updatedBanners = banners.filter(
+                (banner) => banner._id !== selectedBanner
+            );
+            setBanner(updatedBanners);
         } catch (error) {
             console.log(error, 'Không thể xoá banner');
         }
@@ -69,7 +94,7 @@ function AdminBannerPage() {
                     Thao tác
                 </div>
             </div>
-            {banner
+            {banners
                 .slice((currentPage - 1) * pageSize, currentPage * pageSize)
                 .map((banner, index) => (
                     <div className="" key={banner._id}>
@@ -144,7 +169,7 @@ function AdminBannerPage() {
                 nextLabel="next >"
                 onPageChange={onPageChange}
                 pageRangeDisplayed={2}
-                pageCount={Math.ceil(banner.length / pageSize)}
+                pageCount={Math.ceil(banners.length / pageSize)}
                 previousLabel="< previous"
                 renderOnZeroPageCount={null}
                 containerClassName="pagination"
@@ -162,12 +187,12 @@ function AdminBannerPage() {
                         : ''
                 }`}
                 nextClassName={`rounded mx-2 px-2 h-[32px] border flex items-center justify-center hover:text-white hover:bg-[#7000FF] ${
-                    currentPage === Math.ceil(banner.length / pageSize)
+                    currentPage === Math.ceil(banners.length / pageSize)
                         ? 'cursor-not-allowed text-gray-400 hover:bg-white hover:text-gray-400'
                         : ' hover:text-gray-400'
                 }`}
                 nextLinkClassName={`page-link ${
-                    currentPage === Math.ceil(banner.length / pageSize)
+                    currentPage === Math.ceil(banners.length / pageSize)
                         ? 'cursor-not-allowed text-gray-400 hover:bg-white hover:text-gray-400'
                         : ' hover:text-gray-400'
                 }`}

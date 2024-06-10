@@ -18,7 +18,7 @@ class BannerController {
 
     deleteBanners(req, res, next) {
         Banner.deleteOne({ _id: req.params.id })
-            .then(() => res.redirect('back'))
+            .then(() => res.send('Successfully deleted'))
             .catch(err => {
                 console.error('Lỗi khi xóa banner: ', err);
                 next(err);

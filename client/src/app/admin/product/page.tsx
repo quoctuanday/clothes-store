@@ -1,16 +1,37 @@
 'use client';
-import ProductData from '@/api/Product';
 import Image from 'next/image';
+import { Products } from '@/schema/product';
 import Link from 'next/link';
-import React, { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { BiPencil, BiTrash } from 'react-icons/bi';
 import ReactPaginate from 'react-paginate';
 
 function AdminProductPage() {
-    const product = ProductData();
+    const [products, setProducts] = useState<Products[]>([]);
     const [formVisible, setFormVisible] = useState(false);
     const [selectedProduct, setSelectedProduct] = useState<string | null>(null);
     const [currentPage, setCurrentPage] = useState(1);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await fetch('http://localhost:8000/products');
+                if (!response.ok) {
+                    throw new Error('Failed to fetch users');
+                }
+                const data = await response.json();
+                if (data && data.products) {
+                    setProducts(data.products);
+                } else {
+                    throw new Error('Invalid product data received');
+                }
+            } catch (error) {
+                console.error('Error fetching product data:', error);
+            }
+        };
+
+        fetchData();
+    }, []);
 
     const handleDeleteClick = (productID: string) => {
         setSelectedProduct(productID);
@@ -34,6 +55,10 @@ function AdminProductPage() {
             if (!response.ok) {
                 throw new Error('Không thể xóa sản phẩm ');
             }
+            const updatedProducts = products.filter(
+                (product) => product._id !== selectedProduct
+            );
+            setProducts(updatedProducts);
         } catch (error) {
             console.log(error, 'Không thể xoá sản phẩm');
         }
@@ -84,7 +109,7 @@ function AdminProductPage() {
                     Thao tác
                 </div>
             </div>
-            {product
+            {products
                 .slice((currentPage - 1) * pageSize, currentPage * pageSize)
                 .map((product, index) => (
                     <div className="" key={product._id}>
@@ -174,7 +199,7 @@ function AdminProductPage() {
                 nextLabel="next >"
                 onPageChange={onPageChange}
                 pageRangeDisplayed={2}
-                pageCount={Math.ceil(product.length / pageSize)}
+                pageCount={Math.ceil(products.length / pageSize)}
                 previousLabel="< previous"
                 renderOnZeroPageCount={null}
                 containerClassName="pagination"
@@ -192,12 +217,12 @@ function AdminProductPage() {
                         : ''
                 }`}
                 nextClassName={`rounded mx-2 px-2 h-[32px] border flex items-center justify-center hover:text-white hover:bg-[#7000FF] ${
-                    currentPage === Math.ceil(product.length / pageSize)
+                    currentPage === Math.ceil(products.length / pageSize)
                         ? 'cursor-not-allowed pointer-events-none hover:bg-white hover:text-gray-400'
                         : ''
                 }`}
                 nextLinkClassName={`page-link ${
-                    currentPage === Math.ceil(product.length / pageSize)
+                    currentPage === Math.ceil(products.length / pageSize)
                         ? 'cursor-not-allowed pointer-events-none hover:bg-white hover:text-gray-400'
                         : ''
                 }`}

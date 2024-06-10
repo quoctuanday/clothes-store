@@ -27,7 +27,7 @@ class ProductController {
 
     deleteProducts(req, res, next) {
         Product.deleteOne({ _id: req.params.id })
-            .then(() => res.redirect('back'))
+            .then(() => res.send('Successfully deleted'))
             .catch(err => {
                 console.error('Lỗi khi xóa sản phẩm: ', err);
                 next(err);
@@ -40,7 +40,7 @@ class ProductController {
         const product = new Product(formData);
         product
             .save()
-            .then(() => res.redirect('/admin/products'))
+            .then(() => res.send('successfully create'))
             .catch(err => {
                 console.error('Lỗi khi tạo sản phẩm: ', err);
                 next(err);
