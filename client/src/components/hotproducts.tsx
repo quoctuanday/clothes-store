@@ -9,9 +9,10 @@ function HotProducts() {
     const products = ProductData();
     const hotProducts = products
         .filter(
-            (product) => product.quantitySold > 0 && product.quantityInStock > 0
+            (product) =>
+                (product.quantitySold ?? 0) > 0 && product.quantityInStock > 0
         )
-        .sort((a, b) => b.quantitySold - a.quantitySold) // Sắp xếp giảm dần theo quantitySold
+        .sort((a, b) => (b.quantitySold ?? 0) - (a.quantitySold ?? 0))
         .slice(0, 5);
     return (
         <div>

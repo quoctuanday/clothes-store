@@ -15,6 +15,9 @@
         -webkit-line-clamp: 2;
         overflow: hidden;
     }
+    .no-scrollbar::-webkit-scrollbar {
+        display: none;
+    }
 }
 
 @layer components {
@@ -29,6 +32,13 @@
 
     .box-shadow {
         box-shadow: 0px 2px 5px #ccc;
+    }
+
+    .item-hover:hover .item-disable {
+        display: block;
+    }
+    .item-disable {
+        display: none;
     }
 }
 

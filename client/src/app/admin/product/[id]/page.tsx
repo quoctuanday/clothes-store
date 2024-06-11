@@ -20,6 +20,7 @@ function EditProduct({ params }: { params: { id: string } }) {
         material: '',
         image: '',
         quantityInStock: 0,
+        quantitySold: 0,
         price: 0,
     });
 

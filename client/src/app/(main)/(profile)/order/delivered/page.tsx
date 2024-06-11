@@ -1,12 +1,13 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { order } from '@/schema/order';
+import { Orders } from '@/schema/orders';
+
 import Image from 'next/image';
 import Link from 'next/link';
 // Định nghĩa kiểu dữ liệu
 
 function DeliverPage() {
-    const [orders, setOrders] = useState<order[]>([]);
+    const [orders, setOrders] = useState<Orders[]>([]);
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
@@ -21,7 +22,7 @@ function DeliverPage() {
 
                 const data = await response.json();
                 const pendingOrders = data.orders.filter(
-                    (order: order) => order.status === 'Đã giao'
+                    (order: Orders) => order.status === 'Đã giao'
                 );
                 setOrders(pendingOrders || []);
             } catch (error) {

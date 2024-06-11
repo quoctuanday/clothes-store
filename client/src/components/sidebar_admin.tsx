@@ -7,6 +7,7 @@ import { HiSpeakerphone } from 'react-icons/hi';
 import { IoMdHome } from 'react-icons/io';
 import { PiKeyReturn } from 'react-icons/pi';
 import Link from 'next/link';
+import { FaChartSimple } from 'react-icons/fa6';
 
 function SidebarAdmin() {
     const user = UserLoginData();
@@ -88,6 +89,17 @@ function SidebarAdmin() {
                             </li>
                             <li className="my-2.5">
                                 <Link
+                                    href="/admin/statistical"
+                                    className="flex items-center roboto-regular text-white no-underline"
+                                >
+                                    <div className="text-white mr-2.5 ml-5">
+                                        <FaChartSimple />
+                                    </div>
+                                    <div>Thống kê</div>
+                                </Link>
+                            </li>
+                            <li className="my-2.5">
+                                <Link
                                     href="/profile"
                                     className="flex items-center roboto-regular text-white no-underline"
                                 >
@@ -162,6 +174,17 @@ function SidebarAdmin() {
                                         <FaRegNewspaper />
                                     </div>
                                     <div>Quản lý tin tức</div>
+                                </Link>
+                            </li>
+                            <li className="my-2.5">
+                                <Link
+                                    href="/admin/news"
+                                    className="flex items-center roboto-regular text-white no-underline"
+                                >
+                                    <div className="text-white mr-2.5 ml-5">
+                                        <FaChartSimple />
+                                    </div>
+                                    <div>Thống kê</div>
                                 </Link>
                             </li>
                         </ul>

@@ -70,11 +70,9 @@ class OrderController {
                 if (!product) {
                     throw new Error('Không tìm thấy sản phẩm');
                 }
-                // Lấy giá của sản phẩm và gán cho formData.unitPrice
                 formData.unitPrice = product.price;
                 formData.discount = 0;
 
-                // Thiết lập các thuộc tính cho đơn hàng
                 formData.status = 'Chờ xử lí';
                 formData.paymentStatus = 'Chưa thanh toán';
                 formData.totalAmount =
@@ -93,7 +91,6 @@ class OrderController {
                 return order.save();
             })
             .then(savedOrder => {
-                // Lưu orderId của order vào biến createdOrderId
                 const createdOrderId = savedOrder._id;
 
                 // Tạo đối tượng OrderDetail từ formData và orderId của order
@@ -129,31 +126,25 @@ class OrderController {
 
         Order.findByIdAndUpdate(orderId, { status: newStatus }, { new: true })
             .then(updatedOrder => {
-                // Kiểm tra nếu trạng thái mới của đơn hàng là "đã giao"
                 if (newStatus === 'Đã giao') {
-                    // Tìm chi tiết đơn hàng liên quan đến orderId
                     return OrderDetail.findOne({ orderId: orderId });
                 } else {
-                    return Promise.resolve(null); // Không cần cập nhật sản phẩm
+                    return Promise.resolve(null);
                 }
             })
             .then(orderDetail => {
-                // Kiểm tra nếu tìm thấy chi tiết đơn hàng và trạng thái mới của đơn hàng là "đã giao"
                 if (orderDetail && newStatus === 'Đã giao') {
-                    // Lấy quantity từ orderDetail
                     const quantity = orderDetail.quantity;
 
                     // Tìm sản phẩm liên quan đến đơn hàng
                     return Product.findOne({ _id: orderDetail.productId }).then(
                         product => {
-                            // Kiểm tra nếu tìm thấy sản phẩm
                             if (product) {
                                 product.quantitySold += quantity;
                                 product.quantityInStock -= quantity;
-                                // Lưu lại thay đổi trạng thái của sản phẩm
                                 return product.save();
                             } else {
-                                return Promise.resolve(null); // Không cần cập nhật sản phẩm
+                                return Promise.resolve(null);
                             }
                         }
                     );

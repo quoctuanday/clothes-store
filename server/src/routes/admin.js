@@ -15,14 +15,10 @@ router.put(
     '/news/:id/edit-secondary-news',
     adminController.updateSecondaryNews
 );
+
 router.delete('/news/:type/:id', adminController.deleteNews);
 
-router.put('/orders/status/:id', adminController.handleFormActions);
-
-router.put('/orders/:id', adminController.updateOrder);
-
-router.post('/orders/create', adminController.createOrder);
-
+router.get('/totalAmounts', adminController.showTotalAmounts);
 router.get('/', adminController.showHome);
 
 module.exports = router;

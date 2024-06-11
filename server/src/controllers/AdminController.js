@@ -22,6 +22,19 @@ class AdminController {
                 },
             },
         ]);
+        const revenuePromise = Product.aggregate([
+            {
+                $group: {
+                    _id: null,
+                    totalRevenue: {
+                        $sum: { $multiply: ['$quantitySold', '$price'] },
+                    },
+                },
+            },
+        ]);
+        const paidOrderCountPromise = Order.countDocuments({
+            paymentStatus: 'Đã thanh toán',
+        });
 
         Promise.all([
             productCountPromise,
@@ -29,6 +42,8 @@ class AdminController {
             userCountPromise,
             newsCountPromise,
             soldPromise,
+            revenuePromise,
+            paidOrderCountPromise,
         ])
             .then(
                 ([
@@ -37,20 +52,62 @@ class AdminController {
                     userCount,
                     newsCount,
                     soldResult,
+                    revenueCount,
+                    orderCount,
                 ]) => {
                     const soldCount =
                         soldResult.length > 0 ? soldResult[0].totalSold : 0;
+                    const totalRevenue =
+                        revenueCount.length > 0
+                            ? revenueCount[0].totalRevenue
+                            : 0;
                     res.json({
                         productCount,
                         soldCount,
                         bannerCount,
                         userCount,
                         newsCount,
+                        totalRevenue,
+                        orderCount,
                     });
                 }
             )
             .catch(error => {
                 console.error('Lỗi khi đếm số lượng sản phẩm:', error);
+                next(error);
+            });
+    }
+
+    showTotalAmounts(req, res, next) {
+        const paidOrderRevenuePromise = Order.aggregate([
+            {
+                $match: {
+                    paymentStatus: 'Đã thanh toán',
+                },
+            },
+            {
+                $group: {
+                    _id: {
+                        month: { $month: '$createdAt' },
+                    },
+                    totalRevenue: { $sum: '$totalAmount' },
+                },
+            },
+            {
+                $sort: {
+                    '_id.month': 1, // Sắp xếp theo tháng tăng dần
+                },
+            },
+        ]);
+
+        paidOrderRevenuePromise
+            .then(paidOrderRevenue => {
+                res.json({
+                    paidOrderRevenue,
+                });
+            })
+            .catch(error => {
+                console.error('Lỗi khi lấy dữ liệu:', error);
                 next(error);
             });
     }
@@ -92,111 +149,12 @@ class AdminController {
         }
     }
 
-    handleFormActions(req, res, next) {
-        const orderId = req.body.orderId;
-        const newStatus = req.body.status;
-
-        Order.findByIdAndUpdate(orderId, { status: newStatus }, { new: true })
-            .then(updatedOrder => {
-                // Kiểm tra nếu trạng thái mới của đơn hàng là "đã giao"
-                if (newStatus === 'Đã giao') {
-                    // Tìm chi tiết đơn hàng liên quan đến orderId
-                    return OrderDetail.findOne({ orderId: orderId });
-                } else {
-                    return Promise.resolve(null); // Không cần cập nhật sản phẩm
-                }
-            })
-            .then(orderDetail => {
-                // Kiểm tra nếu tìm thấy chi tiết đơn hàng và trạng thái mới của đơn hàng là "đã giao"
-                if (orderDetail && newStatus === 'Đã giao') {
-                    // Lấy quantity từ orderDetail
-                    const quantity = orderDetail.quantity;
-
-                    // Tìm sản phẩm liên quan đến đơn hàng
-                    return Product.findOne({ _id: orderDetail.productId }).then(
-                        product => {
-                            // Kiểm tra nếu tìm thấy sản phẩm
-                            if (product) {
-                                product.quantitySold += quantity;
-                                product.quantityInStock -= quantity;
-                                // Lưu lại thay đổi trạng thái của sản phẩm
-                                return product.save();
-                            } else {
-                                return Promise.resolve(null); // Không cần cập nhật sản phẩm
-                            }
-                        }
-                    );
-                } else {
-                    return Promise.resolve(null);
-                }
-            })
-            .then(() => {
-                res.redirect('back');
-            })
-            .catch(err => {
-                console.error('Lỗi khi cập nhật đơn hàng: ', err);
-                next(err);
-            });
-    }
-
     createMainNews(req, res, next) {
         res.render('admin/create-main-news');
     }
 
     createSecondaryNews(req, res, next) {
         res.render('admin/create-secondary-news');
-    }
-
-    createOrder(req, res, next) {
-        const formData = req.body;
-
-        Product.findById(formData.productId)
-            .then(product => {
-                if (!product) {
-                    throw new Error('Không tìm thấy sản phẩm');
-                }
-                // Lấy giá của sản phẩm và gán cho formData.unitPrice
-                formData.unitPrice = product.price;
-                formData.discount = 0;
-
-                // Thiết lập các thuộc tính cho đơn hàng
-                formData.status = 'Chờ xử lí';
-                formData.paymentStatus = 'Chưa thanh toán';
-                formData.totalAmount =
-                    formData.quantity * formData.unitPrice -
-                    (formData.unitPrice * formData.discount) / 100;
-
-                // Tạo đối tượng Order từ formData
-                const order = new Order({
-                    userId: formData.userId,
-                    productId: formData.productId,
-                    status: formData.status,
-                    totalAmount: formData.totalAmount,
-                    paymentStatus: formData.paymentStatus,
-                });
-
-                return order.save();
-            })
-            .then(savedOrder => {
-                // Lưu orderId của order vào biến createdOrderId
-                const createdOrderId = savedOrder._id;
-
-                // Tạo đối tượng OrderDetail từ formData và orderId của order
-                const orderDetail = new OrderDetail({
-                    orderId: createdOrderId,
-                    productId: formData.productId,
-                    quantity: formData.quantity,
-                    unitPrice: formData.unitPrice,
-                    discount: formData.discount,
-                });
-
-                return orderDetail.save();
-            })
-            .then(() => res.json('Tạo order và order detail thành công'))
-            .catch(err => {
-                console.error('Lỗi khi tạo order hoặc order detail', err);
-                next(err);
-            });
     }
 
     storeMainNews(req, res, next) {
@@ -211,15 +169,6 @@ class AdminController {
         news.save()
             .then(() => res.redirect('/admin/news'))
             .catch(next);
-    }
-
-    updateOrder(req, res, next) {
-        Order.updateOne({ _id: req.params.id }, req.body)
-            .then(() => res.redirect('back'))
-            .catch(err => {
-                console.error('Lỗi khi update order: ', err);
-                next(err);
-            });
     }
 
     updateMainNews(req, res, next) {
