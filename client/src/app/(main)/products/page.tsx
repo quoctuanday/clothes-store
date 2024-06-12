@@ -12,6 +12,12 @@ import ReactPaginate from 'react-paginate';
 
 const ProductPage = () => {
     const products = ProductData();
+    const formatCurrency = (value: number) => {
+        return value.toLocaleString('vi-VN', {
+            style: 'currency',
+            currency: 'VND',
+        });
+    };
 
     //Category
     const [selectedCategory, setSelectedCategory] = useState(null);
@@ -144,9 +150,14 @@ const ProductPage = () => {
                                         <h2 className="my-2 ml-4 w-[236px] line-clamp-1">
                                             {product.productName}
                                         </h2>
-                                        <p className="ml-4 mb-2">
-                                            {product.price} VND
-                                        </p>
+                                        <div className="flex items-center justify-between mx-4 mb-2">
+                                            <p className="">
+                                                {formatCurrency(product.price)}
+                                            </p>
+                                            <p>
+                                                Đã bán: {product.quantitySold}
+                                            </p>
+                                        </div>
                                     </Link>
                                 </li>
                             ))}

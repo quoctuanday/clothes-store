@@ -11,6 +11,12 @@ function AdminProductPage() {
     const [formVisible, setFormVisible] = useState(false);
     const [selectedProduct, setSelectedProduct] = useState<string | null>(null);
     const [currentPage, setCurrentPage] = useState(1);
+    const formatCurrency = (value: number) => {
+        return value.toLocaleString('vi-VN', {
+            style: 'currency',
+            currency: 'VND',
+        });
+    };
 
     useEffect(() => {
         const fetchData = async () => {
@@ -142,8 +148,7 @@ function AdminProductPage() {
                                 {product.quantitySold}
                             </div>
                             <div className="col-span-1 flex justify-center items-center">
-                                {product.price}
-                                {' VND'}
+                                {formatCurrency(product.price)}
                             </div>
                             <div className="col-span-2 flex justify-center items-center">
                                 <button className="rounded p-3 hover:bg-[#0dcaf0] hover:text-[black] border-[1px] border-[#0dcaf0] text-[#0dcaf0] mr-2 ">

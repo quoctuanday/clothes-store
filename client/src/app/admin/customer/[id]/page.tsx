@@ -9,6 +9,12 @@ function AdminOrderPage({ params }: { params: { id: string } }) {
     const [formVisible, setFormVisible] = useState(false);
     const [selectedOrder, setSelectedOrder] = useState<string | null>(null);
     const [currentPage, setCurrentPage] = useState(1);
+    const formatCurrency = (value: number) => {
+        return value.toLocaleString('vi-VN', {
+            style: 'currency',
+            currency: 'VND',
+        });
+    };
     const handleCancelClick = (orderId: string) => {
         setSelectedOrder(orderId);
         setFormVisible(true);
@@ -191,7 +197,7 @@ function AdminOrderPage({ params }: { params: { id: string } }) {
                                     {quantityInStock}
                                 </div>
                                 <div className="col-span-1 flex justify-center items-center">
-                                    {order.totalAmount} VND
+                                    {formatCurrency(order.totalAmount)}
                                 </div>
                                 <div className="col-span-2 flex justify-center items-center">
                                     {new Date(order.createdAt).toLocaleString()}

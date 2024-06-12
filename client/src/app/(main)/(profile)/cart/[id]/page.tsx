@@ -9,6 +9,12 @@ import { CgCheck } from 'react-icons/cg';
 function BuyItemPage({ params }: { params: { id: string } }) {
     const user = UserLoginData();
     const [cartItems, setCartItems] = useState<CartItems | null>(null);
+    const formatCurrency = (value: number) => {
+        return value.toLocaleString('vi-VN', {
+            style: 'currency',
+            currency: 'VND',
+        });
+    };
 
     useEffect(() => {
         const fetchItemDetail = async () => {
@@ -106,13 +112,15 @@ function BuyItemPage({ params }: { params: { id: string } }) {
                     </div>
                 </div>
                 <div className="col-span-2 flex items-center">
-                    {cartItems.productId.price} VND
+                    {formatCurrency(cartItems.productId.price)}
                 </div>
                 <div className="col-span-1 flex items-center justify-center">
                     {cartItems.quantity}
                 </div>
                 <div className="col-span-2 flex items-center">
-                    {cartItems.productId.price * cartItems.quantity} VND
+                    {formatCurrency(
+                        cartItems.productId.price * cartItems.quantity
+                    )}
                 </div>
             </div>
             <div className="mb-4">
@@ -120,7 +128,7 @@ function BuyItemPage({ params }: { params: { id: string } }) {
                 <div className="mt-1 flex items-center text-gray-700">
                     <span>Chọn phương thức thanh toán</span>
                     <div className="p-2 rounded border-2 border-[#7000FF] ml-4 text-[#7000FF] relative">
-                        Chuyển khoản ngân hàng
+                        Chuyển khoản MoMo
                         <div className="absolute bottom-0 right-0 border-[8px] border-l-transparent border-t-transparent border-b-[#7000FF] border-r-[#7000FF]">
                             <CgCheck className="absolute top-[-5px] text-white left-[-5px]" />
                         </div>
@@ -130,18 +138,23 @@ function BuyItemPage({ params }: { params: { id: string } }) {
             <div className="grid grid-cols-2 mb-4">
                 <div className="text-sm text-gray-500">Tổng tiền hàng</div>
                 <div className="text-sm text-gray-500 text-right">
-                    {cartItems.productId.price * cartItems.quantity} VND
+                    {formatCurrency(
+                        cartItems.productId.price * cartItems.quantity
+                    )}
                 </div>
             </div>
             <div className="grid grid-cols-2 mb-4">
                 <div className="text-sm text-gray-500">Phí vận chuyển</div>
-                <div className="text-sm text-gray-500 text-right">0 VND</div>
+                <div className="text-sm text-gray-500 text-right">
+                    {formatCurrency(0)}
+                </div>
             </div>
             <div className="grid grid-cols-2 mb-4 text-[#7000FF]">
                 <div className="text-sm">Tổng thanh toán</div>
                 <div className="text-2xl text-right">
-                    {cartItems.productId.price * cartItems.quantity}
-                    <span className="text-sm ml-1">VND</span>
+                    {formatCurrency(
+                        cartItems.productId.price * cartItems.quantity
+                    )}
                 </div>
             </div>
             <div className="flex justify-end">

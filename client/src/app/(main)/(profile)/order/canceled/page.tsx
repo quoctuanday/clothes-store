@@ -3,11 +3,16 @@ import { useEffect, useState } from 'react';
 import { Orders } from '@/schema/orders';
 import Image from 'next/image';
 import Link from 'next/link';
-// Định nghĩa kiểu dữ liệu
 
 function CanceledPage() {
     const [orders, setOrders] = useState<Orders[]>([]);
     const [error, setError] = useState<string | null>(null);
+    const formatCurrency = (value: number) => {
+        return value.toLocaleString('vi-VN', {
+            style: 'currency',
+            currency: 'VND',
+        });
+    };
 
     useEffect(() => {
         const fetchData = async () => {
@@ -75,8 +80,10 @@ function CanceledPage() {
                                                 </span>
                                             </div>
                                             <div className="col-span-2 text-right ml-10 roboto-regular">
-                                                Thành tiền: {item.totalAmount}{' '}
-                                                VND
+                                                Thành tiền:{' '}
+                                                {formatCurrency(
+                                                    item.totalAmount
+                                                )}
                                             </div>
                                         </div>
                                     </div>

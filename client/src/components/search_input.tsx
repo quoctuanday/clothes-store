@@ -54,7 +54,7 @@ export default function SearchInput() {
                 value={query}
                 onChange={handleOnSearch}
             />
-            <div className="absolute top-9 rounded right-0 left-0 max-w-[524px] max-h-[360px] overflow-y-scroll  shadow-sm bg-white">
+            <div className="absolute z-20 top-9 rounded right-0 left-0 max-w-[524px] max-h-[360px] overflow-y-scroll  shadow-sm bg-white">
                 <ul className="">
                     {productResults.map((product) => (
                         <li key={product._id}>

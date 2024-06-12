@@ -12,6 +12,12 @@ function OrderPage() {
     const [orderToCancel, setOrderToCancel] = useState<string | null>(null);
     const [shortLink, setShortLink] = useState<string | null>(null);
     const [notification, setNotification] = useState<string | null>(null);
+    const formatCurrency = (value: number) => {
+        return value.toLocaleString('vi-VN', {
+            style: 'currency',
+            currency: 'VND',
+        });
+    };
 
     useEffect(() => {
         const fetchData = async () => {
@@ -198,8 +204,10 @@ function OrderPage() {
                                                 </span>
                                             </div>
                                             <div className="col-span-2 text-right ml-10">
-                                                Thành tiền: {item.totalAmount}{' '}
-                                                VND
+                                                Thành tiền:{' '}
+                                                {formatCurrency(
+                                                    item.totalAmount
+                                                )}
                                             </div>
                                         </div>
                                     </div>

@@ -9,6 +9,12 @@ function CartPage() {
     const [cartItems, setCartItems] = useState<CartItems[]>([]);
     const [error, setError] = useState<string | null>(null);
     const [itemToRemove, setItemToRemove] = useState<string | null>(null);
+    const formatCurrency = (value: number) => {
+        return value.toLocaleString('vi-VN', {
+            style: 'currency',
+            currency: 'VND',
+        });
+    };
 
     useEffect(() => {
         const fetchData = async () => {
@@ -116,13 +122,15 @@ function CartPage() {
                                     </Link>
                                 </div>
                                 <div className="col-span-2 flex items-center justify-center">
-                                    {item.productId.price} VND
+                                    {formatCurrency(item.productId.price)}
                                 </div>
                                 <div className="col-span-1 flex items-center justify-center">
                                     {item.quantity}
                                 </div>
                                 <div className="col-span-2 flex items-center justify-center">
-                                    {item.productId.price * item.quantity} VND
+                                    {formatCurrency(
+                                        item.productId.price * item.quantity
+                                    )}
                                 </div>
                                 <div className="col-span-3 flex items-center justify-center space-x-2">
                                     <Link href={`cart/${item._id}`}>

@@ -161,13 +161,13 @@ function Header() {
                                 <div className="z-10 absolute top-[130%] right-[-10%]  shadow-md bg-white p-2 w-[150px] rounded item-disable ">
                                     <Link
                                         href="/login"
-                                        className="block mb-1 bg-[#6a73f4] text-white roboto-regular rounded mt-2  p-1 w-full text-center"
+                                        className="block mb-1 bg-[#6a73f4] hover:bg-[#6a73f4cc] text-white roboto-regular rounded mt-2  p-1 w-full text-center"
                                     >
                                         Đăng nhập
                                     </Link>
                                     <Link
                                         href="/signin"
-                                        className="block bg-[#6a73f4] text-white roboto-regular rounded mb-2  p-1 w-full text-center"
+                                        className="block bg-[#6a73f4]  hover:bg-[#6a73f4cc] text-white roboto-regular rounded mb-2  p-1 w-full text-center"
                                     >
                                         Đăng ký
                                     </Link>

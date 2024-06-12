@@ -7,6 +7,13 @@ export default function ProductDetail({ params }: { params: { id: string } }) {
     const [product, setProduct] = useState<Products | null>(null);
     const [quantity, setQuantity] = useState<number>(1);
 
+    const formatCurrency = (value: number) => {
+        return value.toLocaleString('vi-VN', {
+            style: 'currency',
+            currency: 'VND',
+        });
+    };
+
     useEffect(() => {
         const fetchProductDetail = async () => {
             try {
@@ -78,7 +85,7 @@ export default function ProductDetail({ params }: { params: { id: string } }) {
                         {product.productName}
                     </h1>
                     <span className="text-2xl font-semibold block mb-4 leading-normal mt-2">
-                        Giá sản phẩm: {product.price} VND
+                        Giá sản phẩm: {formatCurrency(product.price)}
                     </span>
                     <span className="text-2xl font-semibold block mb-4 leading-normal">
                         Thương hiệu: {product.branch}
@@ -95,6 +102,10 @@ export default function ProductDetail({ params }: { params: { id: string } }) {
                     <span className="text-2xl font-semibold block mb-4 leading-normal">
                         Mô tả sản phẩm: {product.description}
                     </span>
+                    <span className="text-2xl font-semibold block mb-4 leading-normal">
+                        Hàng tồn kho: {product.quantityInStock}
+                    </span>
+
                     <div className="flex items-center">
                         <div className="flex items-center mt-4">
                             <button
