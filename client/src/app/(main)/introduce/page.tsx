@@ -154,7 +154,7 @@ const Introduce = () => {
                             facebook:
                                 'https://www.facebook.com/profile.php?id=100020561310168',
                             facebookAvatar:
-                                'https://scontent.fhan5-11.fna.fbcdn.net/v/t39.30808-1/427572654_1340003153361716_4819455078748796395_n.jpg?stp=dst-jpg_p200x200&_nc_cat=100&ccb=1-7&_nc_sid=5f2048&_nc_ohc=0dYW0B-pfwAQ7kNvgFO_SmN&_nc_oc=AdjJqSHU5ySHbousdnD1L_SB8sUVZpn_2aauYO3MNEEXfmeq3_YGiIdC0u7pfq6Pzao&_nc_ht=scontent.fhan5-11.fna&oh=00_AYCIE2IbBHU3_Ws-Dd1ChaNK7gcD-y9Cn2y-q7AFBcnq-g&oe=664FC8F3',
+                                'https://scontent.fhan5-11.fna.fbcdn.net/v/t39.30808-1/427572654_1340003153361716_4819455078748796395_n.jpg?stp=dst-jpg_p200x200&_nc_cat=100&ccb=1-7&_nc_sid=5f2048&_nc_ohc=WfpTqzlJcm0Q7kNvgELmccX&_nc_ht=scontent.fhan5-11.fna&oh=00_AYCzXIy14n3qYKB3zZqgNKfRNpPo8mth7Y2BaqHZ0B3pEQ&oe=6657B1F3',
                         },
                         {
                             name: 'Nguyễn Tiến Đạt',
