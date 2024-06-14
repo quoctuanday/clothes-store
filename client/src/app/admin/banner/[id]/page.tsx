@@ -82,55 +82,54 @@ function EditBanner({ params }: { params: { id: string } }) {
     };
 
     return (
-        <div className="px-2">
-            {' '}
-            <div className="text-center p-10 roboto-bold text-3xl">
-                Thêm banner
+        <div className="max-w-3xl mx-auto px-4 py-8">
+            <div className="text-center mb-8 roboto-bold text-3xl">
+                Sửa banner
+                </div>
+            <div className="flex justify-between mb-4">
+                <Link href="/admin/banner">
+                    <button className="roboto-regular rounded p-2 hover:bg-[#0dcaf0] hover:text-[black] border-[1px] border-[#0dcaf0] text-[#0dcaf0]">
+                        Quay lại
+                    </button>
+                </Link>
             </div>
-            <Link href="/admin/banner">
-                <button className="roboto-regular rounded p-2 hover:bg-[#0dcaf0] hover:text-[black] border-[1px] border-[#0dcaf0] text-[#0dcaf0]">
-                    Quay lại
-                </button>
-            </Link>
-            <div className="grid grid-cols-4">
-                <form
-                    className="px-5 col-start-1 col-span-2"
-                    onSubmit={handleSubmit}
-                >
-                    <div className="mb-4 grid grid-cols-3">
-                        <label className="col-span-1 roboto-regular flex items-center justify-end">
-                            Tiêu đề:
-                        </label>
-                        <input
-                            className="col-span-2 ml-3 border border-gray-300 rounded p-1"
-                            type="text"
-                            id="title"
-                            name="title"
+            <div>
+            <form id="addBannerForm" onSubmit={handleSubmit} className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+                <div className="mb-6">
+                    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="title">
+                        Tiêu đề:
+                    </label>
+                    <input
+                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        type="text"
+                        id="title"
+                        name="title"
                             value={formData.title}
                             onChange={handleChange}
                         />
                     </div>
 
-                    <div className="mb-4 grid grid-cols-3">
-                        <label className="col-span-1 roboto-regular flex items-center justify-end">
-                            Hình ảnh:
-                        </label>
-                        <input
-                            className="col-span-2 ml-3 border border-gray-300 rounded p-1"
-                            type="text"
-                            id="image"
-                            name="image"
-                            value={formData.image}
-                            onChange={handleChange}
+                    <div className="mb-6">
+                    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="image">
+                        Hình ảnh:
+                    </label>
+                    <input
+                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        type="text"
+                        id="image"
+                        name="image"
+                        value={formData.image}
+                        onChange={handleChange}
                         />
                     </div>
-
+                    <div className="flex justify-end mt-8">
                     <button
                         type="submit"
-                        className=" rounded p-3 hover:bg-[#0dcaf0] hover:text-[black] border-[1px] border-[#0dcaf0] text-[#0dcaf0]"
+                        className="bg-[#0dcaf0] hover:bg-[#0bb8d9] text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                     >
-                        Cập nhật banner
+                        Tạo banner
                     </button>
+                </div>
                 </form>
             </div>
         </div>
