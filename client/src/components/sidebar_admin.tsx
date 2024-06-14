@@ -178,14 +178,14 @@ function SidebarAdmin() {
                             </li>
                             <li className="my-2.5">
                                 <Link
-                                    href="/admin/news"
+                                    href="/admin/statistical"
                                     className="flex items-center roboto-regular text-white no-underline"
                                 >
                                     <div className="text-white mr-2.5 ml-5">
                                         <FaChartSimple />
                                     </div>
                                     <div>Thống kê</div>
-                                </Link>
+                                </Link> 
                             </li>
                         </ul>
                     </div>
