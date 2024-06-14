@@ -55,43 +55,6 @@ class AdminController {
             });
     }
 
-    showNews(req, res, next) {
-        Promise.all([MainNews.find({}), SecondaryNews.find({})])
-            .then(([mainNews, secondaryNews]) => {
-                res.render('admin/news', {
-                    mainNews: multipleMongooseToObject(mainNews),
-                    secondaryNews: multipleMongooseToObject(secondaryNews),
-                });
-            })
-            .catch(error => {
-                console.error('Lỗi khi đưa ra danh sách tin tức:', error);
-                next(error);
-            });
-    }
-
-    deleteNews(req, res, next) {
-        const newsId = req.params.id;
-        const newsType = req.params.type;
-
-        if (newsType === 'main') {
-            MainNews.deleteOne({ _id: newsId })
-                .then(() => res.redirect('/admin/news'))
-                .catch(err => {
-                    console.error('Lỗi khi xóa tin tức chính: ', err);
-                    next(err);
-                });
-        } else if (newsType === 'secondary') {
-            SecondaryNews.deleteOne({ _id: newsId })
-                .then(() => res.redirect('/admin/news'))
-                .catch(err => {
-                    console.error('Lỗi khi xóa tin tức phụ: ', err);
-                    next(err);
-                });
-        } else {
-            res.status(400).send('Invalid news type');
-        }
-    }
-
     handleFormActions(req, res, next) {
         const orderId = req.body.orderId;
         const newStatus = req.body.status;
@@ -137,14 +100,6 @@ class AdminController {
                 console.error('Lỗi khi cập nhật đơn hàng: ', err);
                 next(err);
             });
-    }
-
-    createMainNews(req, res, next) {
-        res.render('admin/create-main-news');
-    }
-
-    createSecondaryNews(req, res, next) {
-        res.render('admin/create-secondary-news');
     }
 
     createOrder(req, res, next) {
@@ -199,20 +154,6 @@ class AdminController {
             });
     }
 
-    storeMainNews(req, res, next) {
-        const news = new MainNews(req.body);
-        news.save()
-            .then(() => res.redirect('/admin/news'))
-            .catch(next);
-    }
-
-    storeSecondaryNews(req, res, next) {
-        const news = new SecondaryNews(req.body);
-        news.save()
-            .then(() => res.redirect('/admin/news'))
-            .catch(next);
-    }
-
     updateOrder(req, res, next) {
         Order.updateOne({ _id: req.params.id }, req.body)
             .then(() => res.redirect('back'))
@@ -222,37 +163,6 @@ class AdminController {
             });
     }
 
-    updateMainNews(req, res, next) {
-        MainNews.updateOne({ _id: req.params.id }, req.body)
-            .then(() => res.redirect('/admin/news'))
-            .catch(next);
-    }
-
-    updateSecondaryNews(req, res, next) {
-        SecondaryNews.updateOne({ _id: req.params.id }, req.body)
-            .then(() => res.redirect('/admin/news'))
-            .catch(next);
-    }
-
-    editMainNews(req, res, next) {
-        MainNews.findById(req.params.id)
-            .then(mainNews => {
-                res.render('admin/edit-main-news', {
-                    mainNews: mongooseToObject(mainNews),
-                });
-            })
-            .catch(next);
-    }
-
-    editSecondaryNews(req, res, next) {
-        SecondaryNews.findById(req.params.id)
-            .then(secondaryNews => {
-                res.render('admin/edit-secondary-news', {
-                    secondaryNews: mongooseToObject(secondaryNews),
-                });
-            })
-            .catch(next);
-    }
 }
 
 module.exports = new AdminController();
