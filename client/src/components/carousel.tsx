@@ -39,9 +39,6 @@ function CarouselBanner() {
                         <h3 className="max-w-[500px] roboto-bold uppercase text-left text-xl  text-black hover:text-[#45a7ce] cursor-pointer">
                             {item.title}
                         </h3>
-                        <button className="rounded flex items-center justify-center h-8 p-2 mt-5 bg-[#6366f1] text-white roboto-regular">
-                            <a href="#">Visit Docs</a>
-                        </button>
                     </motion.div>
                 </motion.div>
             ))}

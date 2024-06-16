@@ -3,10 +3,11 @@ import { useEffect, useState } from 'react';
 import { Orders } from '@/schema/orders';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 function OrderPage() {
     const router = useRouter();
+    const searchParams = useSearchParams();
     const [orders, setOrders] = useState<Orders[]>([]);
     const [error, setError] = useState<string | null>(null);
     const [orderToCancel, setOrderToCancel] = useState<string | null>(null);
@@ -18,6 +19,31 @@ function OrderPage() {
             currency: 'VND',
         });
     };
+
+    useEffect(() => {
+        if (searchParams) {
+            const fetchCallback = async () => {
+                try {
+                    const query = new URLSearchParams(searchParams).toString();
+                    const response = await fetch(
+                        `http://localhost:8000/payment/vnpay/callback?${query}`,
+                        {
+                            method: 'GET',
+                        }
+                    );
+                    if (!response.ok) {
+                        throw new Error('Không thể xử lý callback');
+                    }
+                    const data = await response.json();
+                    console.log(data);
+                } catch (error) {
+                    console.error(error);
+                    setError('Không thể xử lý callback.');
+                }
+            };
+            fetchCallback();
+        }
+    }, [searchParams]);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -42,54 +68,54 @@ function OrderPage() {
         fetchData();
     }, []);
 
-    useEffect(() => {
-        const orderIdsToCheck = orders.map((order) => order._id);
+    // useEffect(() => {
+    //     const orderIdsToCheck = orders.map((order) => order._id);
 
-        const checkTransactionStatus = async (orderId: string) => {
-            try {
-                const response = await fetch(
-                    `http://localhost:8000/payment/transactions-status`,
-                    {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({ orderId }),
-                    }
-                );
+    //     const checkTransactionStatus = async (orderId: string) => {
+    //         try {
+    //             const response = await fetch(
+    //                 `http://localhost:8000/payment/transactions-status`,
+    //                 {
+    //                     method: 'POST',
+    //                     headers: {
+    //                         'Content-Type': 'application/json',
+    //                     },
+    //                     body: JSON.stringify({ orderId }),
+    //                 }
+    //             );
 
-                if (!response.ok) {
-                    throw new Error('Không thể kiểm tra trạng thái giao dịch');
-                }
+    //             if (!response.ok) {
+    //                 throw new Error('Không thể kiểm tra trạng thái giao dịch');
+    //             }
 
-                const data = await response.json();
-                if (data.message === 'Payment successful and order updated.') {
-                    const updatedOrders = orders.map((order) => {
-                        if (order._id === orderId) {
-                            return { ...order, paymentStatus: 'Đã thanh toán' };
-                        }
-                        return order;
-                    });
-                    setOrders(updatedOrders);
-                } else {
-                    console.log('Payment not successful.');
-                }
-            } catch (error) {
-                console.error(error);
-                setError('Không thể kiểm tra trạng thái giao dịch.');
-            }
-        };
+    //             const data = await response.json();
+    //             if (data.message === 'Payment successful and order updated.') {
+    //                 const updatedOrders = orders.map((order) => {
+    //                     if (order._id === orderId) {
+    //                         return { ...order, paymentStatus: 'Đã thanh toán' };
+    //                     }
+    //                     return order;
+    //                 });
+    //                 setOrders(updatedOrders);
+    //             } else {
+    //                 console.log('Payment not successful.');
+    //             }
+    //         } catch (error) {
+    //             console.error(error);
+    //             setError('Không thể kiểm tra trạng thái giao dịch.');
+    //         }
+    //     };
 
-        orderIdsToCheck.forEach((orderId) => {
-            // Kiểm tra trạng thái thanh toán chỉ khi status của order chưa phải là "Đã thanh toán"
-            if (
-                orders.find((order) => order._id === orderId)?.paymentStatus !==
-                'Đã thanh toán'
-            ) {
-                checkTransactionStatus(orderId);
-            }
-        });
-    }, [orders]);
+    //     orderIdsToCheck.forEach((orderId) => {
+    //         // Kiểm tra trạng thái thanh toán chỉ khi status của order chưa phải là "Đã thanh toán"
+    //         if (
+    //             orders.find((order) => order._id === orderId)?.paymentStatus !==
+    //             'Đã thanh toán'
+    //         ) {
+    //             checkTransactionStatus(orderId);
+    //         }
+    //     });
+    // }, [orders]);
 
     const cancelOrder = async (orderId: string) => {
         try {
@@ -122,18 +148,24 @@ function OrderPage() {
 
     const paymentOrder = async (orderId: string, totalAmount: Number) => {
         try {
-            const response = await fetch(`http://localhost:8000/payment`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ orderId: orderId, amount: totalAmount }),
-            });
+            const response = await fetch(
+                `http://localhost:8000/payment/vnpay/create`,
+                {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        orderId: orderId,
+                        amount: totalAmount,
+                    }),
+                }
+            );
             if (!response.ok) {
                 throw new Error('Không thể cập nhật trạng thái thanh toán');
             }
             const data = await response.json();
-            const shortLink = data.shortLink;
+            const shortLink = data.vnpUrl;
             setShortLink(shortLink);
             setNotification('Bạn đang được chuyển đến trang thanh toán...');
             setTimeout(() => {

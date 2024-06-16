@@ -43,10 +43,11 @@ function SignInPage() {
                 <form className="flex flex-col gap-3" onSubmit={handleSubmit}>
                     <input
                         className="w-[400px] border border-gray-200 py-2 px-6 bg-zinc-100/40"
-                        type="text"
+                        type="email"
                         placeholder="Email"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
+                        required
                     />
                     <input
                         className="w-[400px] border border-gray-200 py-2 px-6 bg-zinc-100/40"
@@ -54,6 +55,9 @@ function SignInPage() {
                         placeholder="Username"
                         value={userName}
                         onChange={(e) => setUserName(e.target.value)}
+                        minLength={6}
+                        maxLength={20}
+                        required
                     />
                     <input
                         className="w-[400px] border border-gray-200 py-2 px-6 bg-zinc-100/40"
@@ -61,6 +65,9 @@ function SignInPage() {
                         placeholder="Password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
+                        minLength={6}
+                        maxLength={20}
+                        required
                     />
                     <button
                         type="submit"

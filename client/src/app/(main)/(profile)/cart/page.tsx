@@ -28,8 +28,6 @@ function CartPage() {
 
                 const data = await response.json();
                 setCartItems(data.cartItem || []);
-                const totalItems = data.cartItem ? data.cartItem.length : 0;
-                localStorage.setItem('cartItemCount', totalItems.toString());
             } catch (error) {
                 console.log(error);
                 setError('Không thể tải mục giỏ hàng.');

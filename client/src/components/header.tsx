@@ -19,14 +19,6 @@ import { MdEmail } from 'react-icons/md';
 function Header() {
     const user = UserLoginData();
 
-    const [cartItemCount, setCartItemCount] = useState(0);
-
-    useEffect(() => {
-        const cartItemCount = localStorage.getItem('cartItemCount');
-        if (cartItemCount !== null) {
-            setCartItemCount(parseInt(cartItemCount));
-        }
-    }, []);
     return (
         <div>
             <nav className="bg-gray-300 h-10 w-full flex items-center justify-between px-[40px]">
@@ -144,9 +136,6 @@ function Header() {
                             <Link href="/cart">
                                 <div className="hover:text-[#7000FF] relative">
                                     <FaShoppingCart />
-                                    <div className="absolute bottom-[10px] right-[-4px] rounded-full bg-[#71b9f4] text-white px-1 text-[8px] ">
-                                        {cartItemCount}
-                                    </div>
                                 </div>
                             </Link>
                         </div>

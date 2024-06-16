@@ -128,7 +128,7 @@ function BuyItemPage({ params }: { params: { id: string } }) {
                 <div className="mt-1 flex items-center text-gray-700">
                     <span>Chọn phương thức thanh toán</span>
                     <div className="p-2 rounded border-2 border-[#7000FF] ml-4 text-[#7000FF] relative">
-                        Chuyển khoản MoMo
+                        Chuyển khoản VnPay
                         <div className="absolute bottom-0 right-0 border-[8px] border-l-transparent border-t-transparent border-b-[#7000FF] border-r-[#7000FF]">
                             <CgCheck className="absolute top-[-5px] text-white left-[-5px]" />
                         </div>
